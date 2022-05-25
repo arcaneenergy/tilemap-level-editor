@@ -139,12 +139,13 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 	file.open(path, File.READ)
 	var text := file.get_as_text()
 
-	print(text)
-#	for tm in _tm_container.get_children():
-#		var a := []
-#		for c in tm.get_used_cells():
-#			a.push_back([tm.get_cellv(c), c.x, c.y])
-#		data.push_back(a)
+	var json_result := JSON.parse(text)
+	if json_result.error == OK:
+		for p in json_result.result:
+			_create_layer(p["texture"])
+
+			for c in p["cells"]:
+				_layers[p["texture"]]["tm"].set_cell(c[1], c[2], c[0])
 
 	file.close()
 
@@ -153,16 +154,23 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	file.open(path, File.WRITE)
 
 	var data := []
-	for tm in _tm_container.get_children():
-		var a := []
+	for lay in _layers.keys():
+		var a := {
+			"texture": lay,
+			"cells": [],
+		}
+		var tm: TileMap = _layers[lay]["tm"]
 		for c in tm.get_used_cells():
-			a.push_back([tm.get_cellv(c), c.x, c.y])
+			a["cells"].push_back([tm.get_cellv(c), c.x, c.y])
 		data.push_back(a)
 
 	file.store_string(JSON.print(data))
 	file.close()
 
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
+	_create_layer(path)
+
+func _create_layer(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
 	layer.set_meta("path", path)
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
