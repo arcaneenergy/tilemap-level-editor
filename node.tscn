@@ -501,6 +501,7 @@ texture = SubResource( 6 )
 expand = true
 
 [node name="Grid" type="Sprite" parent="."]
+scale = Vector2( 4, 4 )
 texture = ExtResource( 2 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 64000, 64000 )

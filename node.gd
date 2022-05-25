@@ -67,7 +67,10 @@ func _on_ButtonNewLayer_pressed() -> void:
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for i in _layer_container.get_children():
 		i.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
+		i.self_modulate = Color.white
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
+	layer.self_modulate = Color.blue
+
 
 	_clear_ts_container()
 
@@ -173,12 +176,13 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 func _create_layer(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
 	layer.set_meta("path", path)
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/Name").text = path.get_file()
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
-#	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize").connect("value_changed", self, "_on_HSliderSize_value_changed", [layer])
+	var hbox := layer.get_node("MarginContainer/VBoxContainer/HBoxContainer")
+	hbox.get_node("CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
+	hbox.get_node("Name").text = path.get_file()
+	hbox.get_node("ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
+	hbox.get_node("ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
+	hbox.get_node("ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+#	hbox.get_node("HSliderSize").connect("value_changed", self, "_on_HSliderSize_value_changed", [layer])
 
 	_layer_container.add_child(layer)
 	_update_layers()
@@ -222,7 +226,7 @@ func _create_layer(path: String) -> void:
 	}
 	_selected_tile = 0
 
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
+	hbox.get_node("CheckBox").emit_signal("toggled", true)
 #	_update_cell_size()
 
 #func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
