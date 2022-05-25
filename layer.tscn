@@ -3,7 +3,7 @@
 [node name="Layer" type="Panel"]
 margin_right = 256.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 0, 112 )
+rect_min_size = Vector2( 0, 96 )
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 
@@ -14,36 +14,35 @@ margin_right = 45.0
 margin_bottom = 18.0
 input_pass_on_modal_close_click = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = -16.0
-custom_constants/separation = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_right = 256.0
-margin_bottom = 64.0
 input_pass_on_modal_close_click = false
 custom_constants/margin_right = 16
 custom_constants/margin_top = 16
 custom_constants/margin_left = 16
 custom_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 240.0
-margin_bottom = 48.0
+margin_bottom = 80.0
+custom_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 224.0
+margin_bottom = 32.0
 input_pass_on_modal_close_click = false
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 0 )
 focus_mode = 0
 input_pass_on_modal_close_click = false
 
-[node name="Name" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Name" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 36.0
 margin_right = 116.0
 margin_bottom = 32.0
@@ -54,7 +53,7 @@ size_flags_vertical = 3
 caret_blink = true
 caret_blink_speed = 0.5
 
-[node name="ButtonUp" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="ButtonUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 120.0
 margin_right = 152.0
 margin_bottom = 32.0
@@ -63,7 +62,7 @@ focus_mode = 0
 input_pass_on_modal_close_click = false
 text = "↑"
 
-[node name="ButtonDown" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="ButtonDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 156.0
 margin_right = 188.0
 margin_bottom = 32.0
@@ -72,7 +71,7 @@ focus_mode = 0
 input_pass_on_modal_close_click = false
 text = "↓"
 
-[node name="ButtonDelete" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="ButtonDelete" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 self_modulate = Color( 1, 0, 0, 1 )
 margin_left = 192.0
 margin_right = 224.0
@@ -82,71 +81,33 @@ focus_mode = 0
 input_pass_on_modal_close_click = false
 text = "X"
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 64.0
-margin_right = 256.0
-margin_bottom = 112.0
-mouse_filter = 2
-input_pass_on_modal_close_click = false
-custom_constants/margin_right = 16
-custom_constants/margin_top = 16
-custom_constants/margin_left = 16
-custom_constants/margin_bottom = 16
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 240.0
-margin_bottom = 32.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 48.0
+margin_right = 224.0
+margin_bottom = 64.0
 mouse_filter = 2
 input_pass_on_modal_close_click = false
 
-[node name="HSliderSizeX" type="HSlider" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_right = 92.0
-margin_bottom = 16.0
-focus_mode = 0
-input_pass_on_modal_close_click = false
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeX"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 32, 0 )
-input_pass_on_modal_close_click = false
-size_flags_vertical = 3
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 96.0
-margin_right = 128.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 32, 0 )
-input_pass_on_modal_close_click = false
-size_flags_vertical = 3
-text = "x"
-align = 1
-valign = 1
-
-[node name="HSliderSizeY" type="HSlider" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 132.0
+[node name="HSliderSize" type="HSlider" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 margin_right = 224.0
 margin_bottom = 16.0
 focus_mode = 0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
+min_value = 16.0
+max_value = 128.0
+step = 16.0
+value = 16.0
+rounded = true
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeY"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 32, 0 )
 input_pass_on_modal_close_click = false
 size_flags_vertical = 3
+text = "16"
 align = 1
 valign = 1
 __meta__ = {

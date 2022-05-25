@@ -52,22 +52,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
 
 	if Input.is_action_pressed("place"):
-		_layers[_current_layer][1].set_cellv(place_pos, _selected_tile)
+		_layers[_current_layer]["tm"].set_cellv(place_pos, _selected_tile)
 
 	if Input.is_action_pressed("delete"):
-		_layers[_current_layer][1].set_cellv(place_pos, -1)
+		_layers[_current_layer]["tm"].set_cellv(place_pos, -1)
 
 func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for i in _layer_container.get_children():
-		i.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
+		i.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
 
 	_clear_ts_container()
 
-	var img_tex := _layers[layer.get_meta("path")][0] as ImageTexture
+	var img_tex := _layers[layer.get_meta("path")]["tex"] as ImageTexture
 	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
@@ -110,7 +110,7 @@ func _clear_ts_container() -> void:
 
 func _on_Layer_deleted(layer: Control) -> void:
 	_clear_ts_container()
-	_layers[layer.get_meta("path")][1].queue_free()
+	_layers[layer.get_meta("path")]["tm"].queue_free()
 	_layer_container.remove_child(layer)
 	_layers.erase(layer.get_meta("path"))
 	layer.queue_free()
@@ -133,14 +133,13 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
 	layer.set_meta("path", path)
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/Name").text = path.get_file()
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/Name").text = path.get_file()
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
 
-	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeX").connect("value_changed", self, "_on_HSliderSizeX_value_changed", [layer])
-	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeY").connect("value_changed", self, "_on_HSliderSizeY_value_changed", [layer])
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize").connect("value_changed", self, "_on_HSliderSize_value_changed", [layer])
 
 	_layer_container.add_child(layer)
 	_update_layers()
@@ -177,13 +176,19 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	tm.scale = Vector2.ONE * 4
 	_tm_container.add_child(tm)
 
-	_layers[path] = [img_tex, tm]
+	_layers[path] = {
+		"tex": img_tex,
+		"tm": tm,
+		"size": [16, 16]
+	}
 	_selected_tile = 0
 
-	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
 
-func _on_HSliderSizeX_value_changed(value: float, layer: Control) -> void:
-	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeX/Label").text = str(value)
-
-func _on_HSliderSizeY_value_changed(value: float, layer: Control) -> void:
-	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeY/Label").text = str(value)
+func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
+	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize/Label").text = str(value)
+	_layers[layer.get_meta("path")]["size"][0] = int(value)
+	var tm: TileMap = _layers[layer.get_meta("path")]["tm"]
+	tm.cell_size = Vector2(int(value), int(value))
+	tm.scale = Vector2.ONE * int(value) / 4
+	_grid.scale = Vector2.ONE * (value / 16)
