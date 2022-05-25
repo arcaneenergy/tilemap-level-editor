@@ -1,7 +1,17 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
+[ext_resource path="res://assets/sprites/grid.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="Gradient" id=5]
+colors = PoolColorArray( 0.392975, 0.482475, 0.636719, 1, 0.293976, 0.33181, 0.445313, 1 )
+
+[sub_resource type="GradientTexture2D" id=6]
+gradient = SubResource( 5 )
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+fill_to = Vector2( 1, 0.5 )
 
 [sub_resource type="DynamicFont" id=2]
 use_mipmaps = true
@@ -477,6 +487,22 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+texture = SubResource( 6 )
+expand = true
+
+[node name="Grid" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 64000, 64000 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true

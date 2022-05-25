@@ -8,6 +8,7 @@ onready var _layer_container: Control = $"%Layers"
 onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
+onready var _grid: Sprite = $Grid
 
 var _initial_drag_pos: Vector2
 var _layers := {}
@@ -61,8 +62,8 @@ func _on_ButtonNewLayer_pressed() -> void:
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for i in _layer_container.get_children():
-		i.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
-	layer.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
+		i.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
 
 	_clear_ts_container()
 
@@ -82,6 +83,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 			idx += 1
 
 	_current_layer = layer.get_meta("path")
+	_grid.scale = Vector2.ONE * 2
 
 func _on_TextureButton_pressed(idx: int) -> void:
 	_selected_tile = idx
@@ -131,11 +133,15 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
 	layer.set_meta("path", path)
-	layer.get_node("MarginContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/Name").text = path.get_file()
-	layer.get_node("MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/Name").text = path.get_file()
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+
+	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeX").connect("value_changed", self, "_on_HSliderSizeX_value_changed", [layer])
+	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeY").connect("value_changed", self, "_on_HSliderSizeY_value_changed", [layer])
+
 	_layer_container.add_child(layer)
 	_update_layers()
 
@@ -174,4 +180,10 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_layers[path] = [img_tex, tm]
 	_selected_tile = 0
 
-	layer.get_node("MarginContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
+	layer.get_node("VBoxContainer/MarginContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
+
+func _on_HSliderSizeX_value_changed(value: float, layer: Control) -> void:
+	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeX/Label").text = str(value)
+
+func _on_HSliderSizeY_value_changed(value: float, layer: Control) -> void:
+	layer.get_node("VBoxContainer/MarginContainer2/HBoxContainer/HSliderSizeY/Label").text = str(value)
