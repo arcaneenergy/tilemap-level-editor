@@ -1,0 +1,49 @@
+[gd_scene format=2]
+
+[node name="Layer" type="Panel"]
+margin_right = 256.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 64 )
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 16
+custom_constants/margin_top = 16
+custom_constants/margin_left = 16
+custom_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 240.0
+margin_bottom = 48.0
+
+[node name="ButtonDelete" type="Button" parent="MarginContainer/HBoxContainer"]
+self_modulate = Color( 1, 0, 0, 1 )
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+text = "X"
+
+[node name="Name" type="LineEdit" parent="MarginContainer/HBoxContainer"]
+margin_left = 36.0
+margin_right = 152.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ButtonUp" type="Button" parent="MarginContainer/HBoxContainer"]
+margin_left = 156.0
+margin_right = 188.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+text = "↑"
+
+[node name="ButtonDown" type="Button" parent="MarginContainer/HBoxContainer"]
+margin_left = 192.0
+margin_right = 224.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+text = "↓"

@@ -4,11 +4,12 @@ onready var _camera: Camera2D = $"%Camera2D"
 onready var _tms: Node2D = $"%Tilemaps"
 onready var _cl: CanvasLayer = $CanvasLayer
 onready var _ts_container: Control = $"%TilesetContainer"
-onready var _layers: Control = $"%Layers"
+onready var _layer_container: Control = $"%Layers"
 onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 
 var _initial_drag_pos: Vector2
+var _layers := []
 
 const CAMERA_MOVE_SPEED := 100
 
@@ -51,7 +52,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		_camera.zoom += Vector2.ONE * 0.01
 
 func _on_ButtonNewLayer_pressed() -> void:
-	pass # Replace with function body.
+	var layer := preload("res://layer.tscn").instance()
+	layer.get_node("MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+	layer.get_node("MarginContainer/HBoxContainer/Name").text = "Layer %d" % _layer_container.get_child_count()
+	layer.get_node("MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
+	layer.get_node("MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
+	_layer_container.add_child(layer)
+
+func _on_Layer_deleted(layer: Control) -> void:
+	_layer_container.remove_child(layer)
+	layer.queue_free()
+
+func _on_Layer_moved_up(layer: Control) -> void:
+	if layer.get_index() - 1 > 0:
+		_layer_container.move_child(layer, layer.get_index() - 1)
+
+func _on_Layer_moved_down(layer: Control) -> void:
+	if layer.get_index() + 1 < _layer_container.get_child_count():
+		_layer_container.move_child(layer, layer.get_index() + 1)
 
 func _on_ButtonImport_pressed() -> void:
 	_fd_import.popup()
