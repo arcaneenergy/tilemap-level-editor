@@ -47,9 +47,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if _current_layer.empty(): return
 
-	var mouse_pos = get_global_mouse_position() / 16
+	var mouse_pos = get_global_mouse_position() / 64
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
-	print(place_pos,"\t",_selected_tile)
 
 	if Input.is_action_pressed("place"):
 		_layers[_current_layer][1].set_cellv(place_pos, _selected_tile)
@@ -65,8 +64,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 		i.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
 	layer.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
 
-	for i in _ts_container.get_children():
-		i.queue_free()
+	_clear_ts_container()
 
 	var img_tex := _layers[layer.get_meta("path")][0] as ImageTexture
 	var idx := 0
@@ -91,13 +89,11 @@ func _on_TextureButton_pressed(idx: int) -> void:
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
 		_layer_container.move_child(layer, layer.get_index() - 1)
-
 	_update_layers()
 
 func _on_Layer_moved_down(layer: Control) -> void:
 	if layer.get_index() + 1 < _layer_container.get_child_count():
 		_layer_container.move_child(layer, layer.get_index() + 1)
-
 	_update_layers()
 
 func _update_layers() -> void:
@@ -106,11 +102,19 @@ func _update_layers() -> void:
 		l.get_node("LabelIndex").text = "#%d" % i
 		i += 1
 
+func _clear_ts_container() -> void:
+	for i in _ts_container.get_children():
+		i.queue_free()
+
 func _on_Layer_deleted(layer: Control) -> void:
+	_clear_ts_container()
+	_layers[layer.get_meta("path")][1].queue_free()
 	_layer_container.remove_child(layer)
-	layer.queue_free()
 	_layers.erase(layer.get_meta("path"))
+	layer.queue_free()
 	_update_layers()
+	_current_layer = ""
+	_selected_tile = -1
 
 func _on_ButtonImport_pressed() -> void:
 	_fd_import.popup()
@@ -150,15 +154,14 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 
 	var tm := TileMap.new()
 	tm.cell_size = Vector2(16, 16)
-	var ts := TileSet.new()
 
+	var ts := TileSet.new()
 	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
 			var at := AtlasTexture.new()
 			at.atlas = img_tex
 			at.region = Rect2(x * 16, y * 16, 16, 16)
-
 			ts.create_tile(idx)
 			ts.tile_set_texture(idx, at)
 			idx += 1
