@@ -10,14 +10,23 @@ onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
 onready var _grid: Sprite = $Grid
 onready var _lbl_position: Label = $"%LabelPosition"
-onready var _cursor: Sprite = $"%Cursor"
+onready var _btn_circle: Button = $"%ShapeContainer/ButtonCircle"
+onready var _btn_square: Button = $"%ShapeContainer/ButtonSquare"
+onready var _hslider_size_lbl: Label = $"%HSliderSize/Label"
+onready var _cursor_container: Node2D = $CursorContainer
+
+enum BrushShape { CIRCLE, SQUARE }
 
 var _initial_drag_pos: Vector2
 var _layers := {}
 var _current_layer := ""
 var _selected_tile := -1
+var _current_shape := 0
+var _current_size := 1
+var _cursors := []
 
 const CAMERA_MOVE_SPEED := 100
+const CURSOR := preload("res://cursor.tscn")
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
@@ -50,7 +59,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	var mouse_pos = get_global_mouse_position() / 64
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
-	_cursor.position = place_pos * 64 + Vector2.ONE * 32
+	for c in _cursors:
+#		c.position += place_pos * 64 + Vector2.ONE * 32
+#		c.position += c.initial_pos + place_pos
+		c.position = place_pos * 64 + Vector2.ONE * 32 + c.offset_pos
+#	_cursor.position = place_pos * 64 + Vector2.ONE * 32
 	_lbl_position.text = str(place_pos)
 
 	if _current_layer.empty(): return
@@ -70,7 +83,6 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 		i.self_modulate = Color.white
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
 	layer.self_modulate = Color.blue
-
 
 	_clear_ts_container()
 
@@ -242,3 +254,50 @@ func _create_layer(path: String) -> void:
 ##	tm.tile_set.
 ##	tm.scale = Vector2.ONE * size / 4
 #	_grid.scale = Vector2.ONE * (size / 16)
+
+
+func _on_ButtonCircle_toggled(button_pressed: bool) -> void:
+	_btn_circle.set_pressed_no_signal(true)
+	_btn_square.set_pressed_no_signal(false)
+	_current_shape = BrushShape.CIRCLE
+	_set_new_cursor_shape()
+
+func _on_ButtonSquare_toggled(button_pressed: bool) -> void:
+	_btn_circle.set_pressed_no_signal(false)
+	_btn_square.set_pressed_no_signal(true)
+	_current_shape = BrushShape.SQUARE
+	_set_new_cursor_shape()
+
+func _on_HSliderSize_value_changed(value: float) -> void:
+	_hslider_size_lbl.text = "%dx" % int(value)
+	_current_size = int(value)
+	_set_new_cursor_shape()
+
+func _set_new_cursor_shape() -> void:
+	for i in _cursor_container.get_children():
+		i.queue_free()
+	_cursors.clear()
+
+	match _current_shape:
+		BrushShape.CIRCLE:
+			var half_size := int(floor(_current_size * 0.5))
+			for x in range(-half_size, half_size + 1):
+				for y in range(-half_size, half_size + 1):
+					if pow(x, 2) + pow(y, 2) <= pow(half_size, 2):
+						var c: Sprite = CURSOR.instance()
+						c.offset_pos = 16 * 4 * Vector2(x, y)
+						_cursor_container.add_child(c)
+						_cursors.push_back(c)
+		BrushShape.SQUARE:
+			var half_size := int(floor(_current_size * 0.5))
+			for x in range(-half_size, half_size + 1):
+				for y in range(-half_size, half_size + 1):
+					var c: Sprite = CURSOR.instance()
+					c.offset_pos = 16 * 4 * Vector2(x, y)
+					_cursor_container.add_child(c)
+					_cursors.push_back(c)
+		_:
+			pass
+
+func _on_ButtonInfo_pressed() -> void:
+	pass # Replace with function body.

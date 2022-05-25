@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/grid.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://assets/sprites/cursor.png" type="Texture" id=4]
 
 [sub_resource type="Gradient" id=5]
 colors = PoolColorArray( 0.392975, 0.482475, 0.636719, 1, 0.293976, 0.33181, 0.445313, 1 )
@@ -501,6 +500,7 @@ texture = SubResource( 6 )
 expand = true
 
 [node name="Grid" type="Sprite" parent="."]
+self_modulate = Color( 1, 1, 1, 0.25098 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 2 )
 region_enabled = true
@@ -516,10 +516,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Cursor" type="Sprite" parent="."]
-unique_name_in_owner = true
-scale = Vector2( 4, 4 )
-texture = ExtResource( 4 )
+[node name="CursorContainer" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -558,28 +555,28 @@ input_pass_on_modal_close_click = false
 custom_constants/separation = 16
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_right = 592.0
+margin_right = 608.0
 margin_bottom = 215.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 
 [node name="TilesetContainer" type="HFlowContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 592.0
+margin_right = 608.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
 
 [node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 608.0
-margin_right = 608.0
+margin_left = 624.0
+margin_right = 624.0
 margin_bottom = 215.0
 input_pass_on_modal_close_click = false
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 624.0
-margin_right = 944.0
+margin_left = 640.0
+margin_right = 960.0
 margin_bottom = 215.0
 rect_min_size = Vector2( 320, 0 )
 input_pass_on_modal_close_click = false
@@ -607,14 +604,14 @@ input_pass_on_modal_close_click = false
 text = "+ New Layer"
 
 [node name="VSeparator2" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 960.0
-margin_right = 960.0
+margin_left = 976.0
+margin_right = 976.0
 margin_bottom = 215.0
 input_pass_on_modal_close_click = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 976.0
-margin_right = 1232.0
+margin_left = 992.0
+margin_right = 1248.0
 margin_bottom = 215.0
 rect_min_size = Vector2( 256, 0 )
 input_pass_on_modal_close_click = false
@@ -635,11 +632,67 @@ focus_mode = 0
 input_pass_on_modal_close_click = false
 text = "Export .json"
 
-[node name="HSplitContainer" type="HSplitContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 1248.0
-margin_right = 1248.0
-margin_bottom = 215.0
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 88.0
+margin_right = 256.0
+margin_bottom = 88.0
+
+[node name="ShapeContainer" type="HBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 104.0
+margin_right = 256.0
+margin_bottom = 132.0
+custom_constants/separation = 16
+
+[node name="ButtonCircle" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer"]
+margin_right = 120.0
+margin_bottom = 28.0
+focus_mode = 0
 input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+toggle_mode = true
+pressed = true
+text = "●"
+
+[node name="ButtonSquare" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer"]
+margin_left = 136.0
+margin_right = 256.0
+margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+toggle_mode = true
+text = "■"
+
+[node name="HSliderSize" type="HSlider" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 148.0
+margin_right = 256.0
+margin_bottom = 164.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+min_value = 1.0
+max_value = 8.0
+value = 1.0
+rounded = true
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/HSliderSize"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+input_pass_on_modal_close_click = false
+text = "1"
+align = 1
+valign = 1
+
+[node name="ButtonInfo" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 180.0
+margin_right = 256.0
+margin_bottom = 208.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "Info"
 
 [node name="FileDialogImportJson" type="FileDialog" parent="CanvasLayer/Control"]
 unique_name_in_owner = true
@@ -708,6 +761,10 @@ autowrap = true
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonImport" to="." method="_on_ButtonImport_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonExport" to="." method="_on_ButtonExport_pressed"]
+[connection signal="toggled" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer/ButtonCircle" to="." method="_on_ButtonCircle_toggled"]
+[connection signal="toggled" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer/ButtonSquare" to="." method="_on_ButtonSquare_toggled"]
+[connection signal="value_changed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/HSliderSize" to="." method="_on_HSliderSize_value_changed"]
+[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonInfo" to="." method="_on_ButtonInfo_pressed"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogImportJson" to="." method="_on_FileDialogImportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogExportJson" to="." method="_on_FileDialogExportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogNewLayer" to="." method="_on_FileDialogNewLayer_file_selected"]
