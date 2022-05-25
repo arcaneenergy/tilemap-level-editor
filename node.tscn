@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/grid.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/sprites/cursor.png" type="Texture" id=4]
 
 [sub_resource type="Gradient" id=5]
 colors = PoolColorArray( 0.392975, 0.482475, 0.636719, 1, 0.293976, 0.33181, 0.445313, 1 )
@@ -684,6 +685,23 @@ mode = 0
 access = 2
 filters = PoolStringArray( "*.png", "*.jpg", "*.jpeg" )
 show_hidden_files = true
+
+[node name="LabelPosition" type="Label" parent="CanvasLayer/Control"]
+unique_name_in_owner = true
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -227.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 89.0
+input_pass_on_modal_close_click = false
+align = 2
+autowrap = true
+
+[node name="Cursor" type="Sprite" parent="."]
+unique_name_in_owner = true
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
 
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonImport" to="." method="_on_ButtonImport_pressed"]

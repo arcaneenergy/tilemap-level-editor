@@ -9,6 +9,8 @@ onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
 onready var _grid: Sprite = $Grid
+onready var _lbl_position: Label = $"%LabelPosition"
+onready var _cursor: Sprite = $"%Cursor"
 
 var _initial_drag_pos: Vector2
 var _layers := {}
@@ -41,15 +43,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		_cl.visible = !_cl.visible
 
 	if Input.is_action_just_pressed("zoom_in"):
-		_camera.zoom -= Vector2.ONE * 0.01
+		_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x - 0.05, 0.01, 4.0)
 
 	if Input.is_action_just_pressed("zoom_out"):
-		_camera.zoom += Vector2.ONE * 0.01
-
-	if _current_layer.empty(): return
+		_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x + 0.05, 0.01, 4.0)
 
 	var mouse_pos = get_global_mouse_position() / 64
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
+	_cursor.position = place_pos * 64 +Vector2.ONE* 32
+	_lbl_position.text = str(place_pos)
+
+	if _current_layer.empty(): return
 
 	if Input.is_action_pressed("place"):
 		_layers[_current_layer]["tm"].set_cellv(place_pos, _selected_tile)
@@ -83,7 +87,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 			idx += 1
 
 	_current_layer = layer.get_meta("path")
-	_grid.scale = Vector2.ONE * 2
+	_update_cell_size()
 
 func _on_TextureButton_pressed(idx: int) -> void:
 	_selected_tile = idx
@@ -179,16 +183,23 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_layers[path] = {
 		"tex": img_tex,
 		"tm": tm,
-		"size": [16, 16]
+		"size": 16
 	}
 	_selected_tile = 0
 
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
+	_update_cell_size()
 
 func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize/Label").text = str(value)
-	_layers[layer.get_meta("path")]["size"][0] = int(value)
-	var tm: TileMap = _layers[layer.get_meta("path")]["tm"]
-	tm.cell_size = Vector2(int(value), int(value))
-	tm.scale = Vector2.ONE * int(value) / 4
-	_grid.scale = Vector2.ONE * (value / 16)
+	_layers[layer.get_meta("path")]["size"] = int(value)
+	_update_cell_size()
+
+func _update_cell_size() -> void:
+	var tm: TileMap = _layers[_current_layer]["tm"]
+	var size: int = _layers[_current_layer]["size"]
+#	tm.cell_size = Vector2(size, size)
+	print(size)
+#	tm.tile_set.
+#	tm.scale = Vector2.ONE * size / 4
+	_grid.scale = Vector2.ONE * (size / 16)
