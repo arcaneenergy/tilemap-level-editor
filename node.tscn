@@ -603,6 +603,7 @@ margin_right = 320.0
 margin_bottom = 215.0
 focus_mode = 0
 input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
 text = "+ New Layer"
 
 [node name="VSeparator2" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]

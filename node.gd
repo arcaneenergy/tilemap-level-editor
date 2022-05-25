@@ -69,7 +69,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
 	for c in _cursors:
 		c.position = place_pos * 64 + Vector2.ONE * 32 + c.offset_pos
-	_lbl_position.text = str(place_pos)
+	_lbl_position.text = "%s\n%d" % [place_pos, _selected_tile]
 
 	if _current_layer.empty(): return
 
