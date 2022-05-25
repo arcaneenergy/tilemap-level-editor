@@ -12,6 +12,7 @@ onready var _grid: Sprite = $Grid
 onready var _lbl_position: Label = $"%LabelPosition"
 onready var _btn_circle: Button = $"%ShapeContainer/ButtonCircle"
 onready var _btn_square: Button = $"%ShapeContainer/ButtonSquare"
+onready var _hslider_size: HSlider = $"%HSliderSize"
 onready var _hslider_size_lbl: Label = $"%HSliderSize/Label"
 onready var _cursor_container: Node2D = $CursorContainer
 
@@ -31,48 +32,53 @@ const CURSOR := preload("res://cursor.tscn")
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
 		_camera.position.y -= CAMERA_MOVE_SPEED * _camera.zoom.x * delta
-
 	if Input.is_action_pressed("move_down"):
 		_camera.position.y += CAMERA_MOVE_SPEED * _camera.zoom.x * delta
-
 	if Input.is_action_pressed("move_left"):
 		_camera.position.x -= CAMERA_MOVE_SPEED * _camera.zoom.x * delta
-
 	if Input.is_action_pressed("move_right"):
 		_camera.position.x += CAMERA_MOVE_SPEED * _camera.zoom.x * delta
-
 	if Input.is_action_pressed("drag"):
 		_camera.position += _initial_drag_pos - get_global_mouse_position()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
 		_initial_drag_pos = get_global_mouse_position()
-
 	if Input.is_action_just_pressed("toggle_gui"):
 		_cl.visible = !_cl.visible
 
-	if Input.is_action_just_pressed("zoom_in"):
-		_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x - 0.05, 0.01, 4.0)
+	var shift_pressed := Input.is_action_pressed("shift")
 
+	if Input.is_action_just_pressed("zoom_in"):
+		if shift_pressed:
+			_hslider_size.value = clamp(_current_size + 1, 1, 8)
+		else:
+			_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x - 0.05, 0.01, 4.0)
 	if Input.is_action_just_pressed("zoom_out"):
-		_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x + 0.05, 0.01, 4.0)
+		if shift_pressed:
+			_hslider_size.value = clamp(_current_size - 1, 1, 8)
+		else:
+			_camera.zoom = Vector2.ONE * clamp(_camera.zoom.x + 0.05, 0.01, 4.0)
 
 	var mouse_pos = get_global_mouse_position() / 64
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
 	for c in _cursors:
-#		c.position += place_pos * 64 + Vector2.ONE * 32
-#		c.position += c.initial_pos + place_pos
 		c.position = place_pos * 64 + Vector2.ONE * 32 + c.offset_pos
-#	_cursor.position = place_pos * 64 + Vector2.ONE * 32
 	_lbl_position.text = str(place_pos)
 
 	if _current_layer.empty(): return
 
 	if Input.is_action_pressed("place"):
-		_layers[_current_layer]["tm"].set_cellv(place_pos, _selected_tile)
+		for i in _cursors:
+			_layers[_current_layer]["tm"].set_cellv(
+				Vector2(floor(i.position.x / 64), floor(i.position.y / 64)),
+				_selected_tile)
 
 	if Input.is_action_pressed("delete"):
-		_layers[_current_layer]["tm"].set_cellv(place_pos, -1)
+		for i in _cursors:
+			_layers[_current_layer]["tm"].set_cellv(
+				Vector2(floor(i.position.x / 64), floor(i.position.y / 64)),
+				-1)
 
 func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
