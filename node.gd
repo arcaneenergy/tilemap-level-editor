@@ -21,16 +21,16 @@ const CAMERA_MOVE_SPEED := 100
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
-		_camera.position.y -= CAMERA_MOVE_SPEED * delta
+		_camera.position.y -= CAMERA_MOVE_SPEED * _camera.zoom.x * delta
 
 	if Input.is_action_pressed("move_down"):
-		_camera.position.y += CAMERA_MOVE_SPEED * delta
+		_camera.position.y += CAMERA_MOVE_SPEED * _camera.zoom.x * delta
 
 	if Input.is_action_pressed("move_left"):
-		_camera.position.x -= CAMERA_MOVE_SPEED * delta
+		_camera.position.x -= CAMERA_MOVE_SPEED * _camera.zoom.x * delta
 
 	if Input.is_action_pressed("move_right"):
-		_camera.position.x += CAMERA_MOVE_SPEED * delta
+		_camera.position.x += CAMERA_MOVE_SPEED * _camera.zoom.x * delta
 
 	if Input.is_action_pressed("drag"):
 		_camera.position += _initial_drag_pos - get_global_mouse_position()
@@ -38,6 +38,15 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
 		_initial_drag_pos = get_global_mouse_position()
+
+		var data := []
+		for tm in _tm_container.get_children():
+			var a := []
+			for c in tm.get_used_cells():
+				a.push_back([tm.get_cellv(c), c])
+			data.push_back(a)
+
+		print(data)
 
 	if Input.is_action_just_pressed("toggle_gui"):
 		_cl.visible = !_cl.visible
@@ -50,7 +59,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	var mouse_pos = get_global_mouse_position() / 64
 	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
-	_cursor.position = place_pos * 64 +Vector2.ONE* 32
+	_cursor.position = place_pos * 64 + Vector2.ONE * 32
 	_lbl_position.text = str(place_pos)
 
 	if _current_layer.empty(): return
@@ -76,6 +85,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
 			var btn := TextureButton.new()
+			btn.focus_mode = Control.FOCUS_NONE
 			btn.expand = true
 			btn.rect_min_size = Vector2.ONE * 64
 			btn.connect("pressed", self, "_on_TextureButton_pressed", [idx])
@@ -87,7 +97,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 			idx += 1
 
 	_current_layer = layer.get_meta("path")
-	_update_cell_size()
+#	_update_cell_size()
 
 func _on_TextureButton_pressed(idx: int) -> void:
 	_selected_tile = idx
@@ -132,7 +142,13 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 	pass
 
 func _on_FileDialogExportJson_file_selected(path: String) -> void:
+#	var file := File.new()
+#	file.open(path, File.WRITE)
+
 	pass
+
+#	file.store_string(JSON.print(data))
+#	file.close()
 
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
@@ -142,8 +158,7 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
-
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize").connect("value_changed", self, "_on_HSliderSize_value_changed", [layer])
+#	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize").connect("value_changed", self, "_on_HSliderSize_value_changed", [layer])
 
 	_layer_container.add_child(layer)
 	_update_layers()
@@ -188,18 +203,18 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_selected_tile = 0
 
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)
-	_update_cell_size()
+#	_update_cell_size()
 
-func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize/Label").text = str(value)
-	_layers[layer.get_meta("path")]["size"] = int(value)
-	_update_cell_size()
+#func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
+#	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize/Label").text = str(value)
+#	_layers[layer.get_meta("path")]["size"] = int(value)
+#	_update_cell_size()
 
-func _update_cell_size() -> void:
-	var tm: TileMap = _layers[_current_layer]["tm"]
-	var size: int = _layers[_current_layer]["size"]
-#	tm.cell_size = Vector2(size, size)
-	print(size)
-#	tm.tile_set.
-#	tm.scale = Vector2.ONE * size / 4
-	_grid.scale = Vector2.ONE * (size / 16)
+#func _update_cell_size() -> void:
+#	var tm: TileMap = _layers[_current_layer]["tm"]
+#	var size: int = _layers[_current_layer]["size"]
+##	tm.cell_size = Vector2(size, size)
+#	print(size)
+##	tm.tile_set.
+##	tm.scale = Vector2.ONE * size / 4
+#	_grid.scale = Vector2.ONE * (size / 16)

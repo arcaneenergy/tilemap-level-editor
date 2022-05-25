@@ -515,6 +515,11 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Cursor" type="Sprite" parent="."]
+unique_name_in_owner = true
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -697,11 +702,6 @@ margin_bottom = 89.0
 input_pass_on_modal_close_click = false
 align = 2
 autowrap = true
-
-[node name="Cursor" type="Sprite" parent="."]
-unique_name_in_owner = true
-scale = Vector2( 4, 4 )
-texture = ExtResource( 4 )
 
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonImport" to="." method="_on_ButtonImport_pressed"]
