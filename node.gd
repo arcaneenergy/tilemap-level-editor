@@ -15,6 +15,7 @@ onready var _btn_square: Button = $"%ShapeContainer/ButtonSquare"
 onready var _hslider_size: HSlider = $"%HSliderSize"
 onready var _hslider_size_lbl: Label = $"%HSliderSize/Label"
 onready var _cursor_container: Node2D = $CursorContainer
+onready var _window_dialog_info: WindowDialog = $"%WindowDialogInfo"
 
 enum BrushShape { CIRCLE, SQUARE }
 
@@ -306,4 +307,4 @@ func _set_new_cursor_shape() -> void:
 			pass
 
 func _on_ButtonInfo_pressed() -> void:
-	pass # Replace with function body.
+	_window_dialog_info.popup()

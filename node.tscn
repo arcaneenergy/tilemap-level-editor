@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/grid.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/sprites/logo.png" type="Texture" id=4]
+[ext_resource path="res://info.gd" type="Script" id=5]
 
 [sub_resource type="Gradient" id=5]
 colors = PoolColorArray( 0.392975, 0.482475, 0.636719, 1, 0.293976, 0.33181, 0.445313, 1 )
@@ -296,7 +298,7 @@ ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
 ProgressBar/fonts/font = SubResource( 2 )
 ProgressBar/styles/bg = null
 ProgressBar/styles/fg = null
-RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
+RichTextLabel/colors/default_color = Color( 1, 1, 1, 1 )
 RichTextLabel/colors/font_color_selected = Color( 0, 0, 0, 1 )
 RichTextLabel/colors/font_color_shadow = Color( 0, 0, 0, 1 )
 RichTextLabel/colors/selection_color = Color( 0, 0, 0, 1 )
@@ -746,6 +748,123 @@ access = 2
 filters = PoolStringArray( "*.png", "*.jpg", "*.jpeg" )
 show_hidden_files = true
 
+[node name="WindowDialogInfo" type="WindowDialog" parent="CanvasLayer/Control"]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -417.0
+margin_top = -216.0
+margin_right = 417.0
+margin_bottom = 216.0
+window_title = "Info"
+resizable = true
+script = ExtResource( 5 )
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/WindowDialogInfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 16
+custom_constants/margin_top = 16
+custom_constants/margin_left = 16
+custom_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 818.0
+margin_bottom = 416.0
+custom_constants/separation = 16
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 12.0
+margin_right = 802.0
+margin_bottom = 76.0
+custom_constants/separation = 16
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 296.0
+margin_right = 360.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 376.0
+margin_top = 21.0
+margin_right = 506.0
+margin_bottom = 43.0
+text = "Arcane Energy"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 92.0
+margin_right = 802.0
+margin_bottom = 92.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 108.0
+margin_right = 802.0
+margin_bottom = 284.0
+bbcode_enabled = true
+bbcode_text = "[center]
+Tilemap Level Editor
+
+MIT License
+Copyright (c) 2022 arcaneenergy
+
+Contact: arcane.energy.help@gmail.com
+[/center]"
+text = "
+Tilemap Level Editor
+
+MIT License
+Copyright (c) 2022 arcaneenergy
+
+Contact: arcane.energy.help@gmail.com
+"
+fit_content_height = true
+
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 300.0
+margin_right = 802.0
+margin_bottom = 300.0
+
+[node name="ButtonGithub" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_left = 300.0
+margin_top = 316.0
+margin_right = 502.0
+margin_bottom = 344.0
+size_flags_horizontal = 4
+text = "GitHub Project Page"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 360.0
+margin_right = 802.0
+margin_bottom = 388.0
+custom_constants/separation = 16
+alignment = 1
+
+[node name="ButtonYouTube" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 265.0
+margin_right = 393.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 128, 0 )
+text = "YouTube"
+
+[node name="ButtonWebsite" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 409.0
+margin_right = 537.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 128, 0 )
+text = "Website"
+
 [node name="LabelPosition" type="Label" parent="CanvasLayer/Control"]
 unique_name_in_owner = true
 anchor_left = 1.0
@@ -768,3 +887,6 @@ autowrap = true
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogImportJson" to="." method="_on_FileDialogImportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogExportJson" to="." method="_on_FileDialogExportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogNewLayer" to="." method="_on_FileDialogNewLayer_file_selected"]
+[connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/ButtonGithub" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonGithub_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonYouTube" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonYouTube_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonWebsite" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonWebsite_pressed"]
