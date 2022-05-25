@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 		_camera.position.x += CAMERA_MOVE_SPEED * delta
 
 	if Input.is_action_pressed("drag"):
-		_camera.position += (_initial_drag_pos - _tm.get_global_mouse_position())
+		_camera.position += _initial_drag_pos - _tm.get_global_mouse_position()
 
 func _unhandled_input(event: InputEvent) -> void:
 	var pos = _tm.get_global_mouse_position() / 16
