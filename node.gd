@@ -29,6 +29,10 @@ var _cursors := []
 
 const CAMERA_MOVE_SPEED := 100
 const CURSOR := preload("res://cursor.tscn")
+const TILE_BTN := preload("res://tile_button.tscn")
+
+func _ready() -> void:
+	_set_new_cursor_shape()
 
 func _process(delta: float) -> void:
 	if Input.is_action_pressed("move_up"):
@@ -85,11 +89,15 @@ func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
+	_set_selection(-1)
+
 	for i in _layer_container.get_children():
 		i.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
 		i.self_modulate = Color.white
 	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
 	layer.self_modulate = Color.blue
+
+	if _current_layer == layer.get_meta("path"): return
 
 	_clear_ts_container()
 
@@ -97,10 +105,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
-			var btn := TextureButton.new()
-			btn.focus_mode = Control.FOCUS_NONE
-			btn.expand = true
-			btn.rect_min_size = Vector2.ONE * 64
+			var btn := TILE_BTN.instance()
 			btn.connect("pressed", self, "_on_TextureButton_pressed", [idx])
 			var at := AtlasTexture.new()
 			at.atlas = img_tex
@@ -112,8 +117,17 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	_current_layer = layer.get_meta("path")
 #	_update_cell_size()
 
-func _on_TextureButton_pressed(idx: int) -> void:
+func _set_selection(idx: int) -> void:
+	if _selected_tile != -1:
+		_ts_container.get_child(_selected_tile).get_node("Label").visible = false
+
 	_selected_tile = idx
+
+	if idx != -1:
+		_ts_container.get_child(idx).get_node("Label").visible = true
+
+func _on_TextureButton_pressed(idx: int) -> void:
+	_set_selection(idx)
 
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
@@ -147,7 +161,7 @@ func _on_Layer_deleted(layer: Control) -> void:
 	layer.queue_free()
 	_update_layers()
 	_current_layer = ""
-	_selected_tile = -1
+	_set_selection(-1)
 
 func _on_ButtonImport_pressed() -> void:
 	_fd_import.popup()
@@ -243,7 +257,6 @@ func _create_layer(path: String) -> void:
 		"tm": tm,
 		"size": 16
 	}
-	_selected_tile = 0
 
 	hbox.get_node("CheckBox").emit_signal("toggled", true)
 #	_update_cell_size()

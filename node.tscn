@@ -637,13 +637,14 @@ text = "Export .json"
 [node name="HSeparator" type="HSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 88.0
 margin_right = 256.0
-margin_bottom = 88.0
+margin_bottom = 95.0
+size_flags_vertical = 3
 
 [node name="ShapeContainer" type="HBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-margin_top = 104.0
+margin_top = 111.0
 margin_right = 256.0
-margin_bottom = 132.0
+margin_bottom = 139.0
 custom_constants/separation = 16
 
 [node name="ButtonCircle" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer"]
@@ -670,9 +671,9 @@ text = "■"
 
 [node name="HSliderSize" type="HSlider" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-margin_top = 148.0
+margin_top = 155.0
 margin_right = 256.0
-margin_bottom = 164.0
+margin_bottom = 171.0
 focus_mode = 0
 input_pass_on_modal_close_click = false
 min_value = 1.0
@@ -689,9 +690,9 @@ align = 1
 valign = 1
 
 [node name="ButtonInfo" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 180.0
+margin_top = 187.0
 margin_right = 256.0
-margin_bottom = 208.0
+margin_bottom = 215.0
 focus_mode = 0
 input_pass_on_modal_close_click = false
 text = "Info"
