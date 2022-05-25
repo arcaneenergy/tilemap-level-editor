@@ -671,6 +671,7 @@ input_pass_on_modal_close_click = false
 window_title = "Datei speichern"
 resizable = true
 access = 2
+filters = PoolStringArray( "*.json" )
 show_hidden_files = true
 
 [node name="FileDialogNewLayer" type="FileDialog" parent="CanvasLayer/Control"]

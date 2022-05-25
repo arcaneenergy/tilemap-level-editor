@@ -39,15 +39,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("drag"):
 		_initial_drag_pos = get_global_mouse_position()
 
-		var data := []
-		for tm in _tm_container.get_children():
-			var a := []
-			for c in tm.get_used_cells():
-				a.push_back([tm.get_cellv(c), c])
-			data.push_back(a)
-
-		print(data)
-
 	if Input.is_action_just_pressed("toggle_gui"):
 		_cl.visible = !_cl.visible
 
@@ -104,12 +95,16 @@ func _on_TextureButton_pressed(idx: int) -> void:
 
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
-		_layer_container.move_child(layer, layer.get_index() - 1)
+		var new_idx := layer.get_index() - 1
+		_layer_container.move_child(layer, new_idx)
+		_tm_container.move_child(_layers[layer.get_meta("path")]["tm"], new_idx)
 	_update_layers()
 
 func _on_Layer_moved_down(layer: Control) -> void:
 	if layer.get_index() + 1 < _layer_container.get_child_count():
-		_layer_container.move_child(layer, layer.get_index() + 1)
+		var new_idx := layer.get_index() + 1
+		_layer_container.move_child(layer, new_idx)
+		_tm_container.move_child(_layers[layer.get_meta("path")]["tm"], new_idx)
 	_update_layers()
 
 func _update_layers() -> void:
@@ -137,18 +132,35 @@ func _on_ButtonImport_pressed() -> void:
 
 func _on_ButtonExport_pressed() -> void:
 	_fd_export.popup()
+	_fd_export.current_file = "level.json"
 
 func _on_FileDialogImportJson_file_selected(path: String) -> void:
-	pass
+	var file := File.new()
+	file.open(path, File.READ)
+	var text := file.get_as_text()
+
+	print(text)
+#	for tm in _tm_container.get_children():
+#		var a := []
+#		for c in tm.get_used_cells():
+#			a.push_back([tm.get_cellv(c), c.x, c.y])
+#		data.push_back(a)
+
+	file.close()
 
 func _on_FileDialogExportJson_file_selected(path: String) -> void:
-#	var file := File.new()
-#	file.open(path, File.WRITE)
+	var file := File.new()
+	file.open(path, File.WRITE)
 
-	pass
+	var data := []
+	for tm in _tm_container.get_children():
+		var a := []
+		for c in tm.get_used_cells():
+			a.push_back([tm.get_cellv(c), c.x, c.y])
+		data.push_back(a)
 
-#	file.store_string(JSON.print(data))
-#	file.close()
+	file.store_string(JSON.print(data))
+	file.close()
 
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
