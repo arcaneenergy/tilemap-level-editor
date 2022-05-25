@@ -10,7 +10,7 @@ onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
 
 var _initial_drag_pos: Vector2
-var _layers := []
+var _layers := {}
 
 const CAMERA_MOVE_SPEED := 100
 
@@ -55,8 +55,25 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
-func _on_Layer_toggled(layer: Control) -> void:
-	pass
+func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
+	for i in _layer_container.get_children():
+		i.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
+	layer.get_node("MarginContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
+
+	for i in _ts_container.get_children():
+		i.queue_free()
+
+	var img_tex := _layers[layer.get_meta("path")] as ImageTexture
+	for x in range(img_tex.get_width() / 16):
+		for y in range(img_tex.get_height() / 16):
+			var btn := TextureButton.new()
+			btn.expand = true
+			btn.rect_min_size = Vector2.ONE * 64
+			var at := AtlasTexture.new()
+			at.atlas = img_tex
+			at.region = Rect2(x * 16, y * 16, 16, 16)
+			btn.texture_normal = at
+			_ts_container.add_child(btn)
 
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
@@ -95,10 +112,25 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var layer := preload("res://layer.tscn").instance()
+	layer.set_meta("path", path)
 	layer.get_node("MarginContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/Name").text = "Layer %d" % _layer_container.get_child_count()
+	layer.get_node("MarginContainer/HBoxContainer/Name").text = path.get_file()
 	layer.get_node("MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
 	layer.get_node("MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
 	layer.get_node("MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
 	_layer_container.add_child(layer)
 	_update_layers()
+
+	var file := File.new()
+	file.open(path, File.READ)
+	var buffer := file.get_buffer(file.get_len())
+	var img := Image.new()
+	var data
+	if path.ends_with(".png"):
+		data = img.load_png_from_buffer(buffer)
+	elif path.ends_with(".jpg") or path.ends_with(".jpeg"):
+		data = img.load_jpg_from_buffer(buffer)
+	var img_tex := ImageTexture.new()
+	img_tex.create_from_image(img)
+	file.close()
+	_layers[path] = img_tex
