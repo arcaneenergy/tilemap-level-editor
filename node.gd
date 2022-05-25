@@ -11,6 +11,8 @@ onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
 
 var _initial_drag_pos: Vector2
 var _layers := {}
+var _current_layer := ""
+var _selected_tile := -1
 
 const CAMERA_MOVE_SPEED := 100
 
@@ -31,26 +33,29 @@ func _process(delta: float) -> void:
 		_camera.position += _initial_drag_pos - get_global_mouse_position()
 
 func _unhandled_input(event: InputEvent) -> void:
-
-	if Input.is_action_pressed("place"):
-		var pos = get_global_mouse_position() / 16
-#		_tm.set_cell(pos.x, pos.y, 0)
-
-	if Input.is_action_pressed("delete"):
-		var pos = get_global_mouse_position() / 16
-#		_tm.set_cell(pos.x, pos.y, -1)
+	if Input.is_action_just_pressed("drag"):
+		_initial_drag_pos = get_global_mouse_position()
 
 	if Input.is_action_just_pressed("toggle_gui"):
 		_cl.visible = !_cl.visible
-
-	if Input.is_action_just_pressed("drag"):
-		_initial_drag_pos = get_global_mouse_position()
 
 	if Input.is_action_just_pressed("zoom_in"):
 		_camera.zoom -= Vector2.ONE * 0.01
 
 	if Input.is_action_just_pressed("zoom_out"):
 		_camera.zoom += Vector2.ONE * 0.01
+
+	if _current_layer.empty(): return
+
+	var mouse_pos = get_global_mouse_position() / 16
+	var place_pos := Vector2(floor(mouse_pos.x), floor(mouse_pos.y))
+	print(place_pos,"\t",_selected_tile)
+
+	if Input.is_action_pressed("place"):
+		_layers[_current_layer][1].set_cellv(place_pos, _selected_tile)
+
+	if Input.is_action_pressed("delete"):
+		_layers[_current_layer][1].set_cellv(place_pos, -1)
 
 func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
@@ -63,7 +68,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for i in _ts_container.get_children():
 		i.queue_free()
 
-	var img_tex := _layers[layer.get_meta("path")] as ImageTexture
+	var img_tex := _layers[layer.get_meta("path")][0] as ImageTexture
 	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
@@ -78,8 +83,10 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 			_ts_container.add_child(btn)
 			idx += 1
 
+	_current_layer = layer.get_meta("path")
+
 func _on_TextureButton_pressed(idx: int) -> void:
-	print(idx)
+	_selected_tile = idx
 
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
@@ -102,6 +109,7 @@ func _update_layers() -> void:
 func _on_Layer_deleted(layer: Control) -> void:
 	_layer_container.remove_child(layer)
 	layer.queue_free()
+	_layers.erase(layer.get_meta("path"))
 	_update_layers()
 
 func _on_ButtonImport_pressed() -> void:
@@ -139,12 +147,28 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	var img_tex := ImageTexture.new()
 	img_tex.create_from_image(img, 1 | 2)
 	file.close()
-	_layers[path] = img_tex
 
 	var tm := TileMap.new()
 	tm.cell_size = Vector2(16, 16)
 	var ts := TileSet.new()
-	ts.create_tile(_layers.size())
-	ts.tile_set_texture(_layers.size(), img_tex)
+
+	var idx := 0
+	for x in range(img_tex.get_width() / 16):
+		for y in range(img_tex.get_height() / 16):
+			var at := AtlasTexture.new()
+			at.atlas = img_tex
+			at.region = Rect2(x * 16, y * 16, 16, 16)
+
+			ts.create_tile(idx)
+			ts.tile_set_texture(idx, at)
+			idx += 1
+
 	tm.tile_set = ts
+
+	tm.scale = Vector2.ONE * 4
 	_tm_container.add_child(tm)
+
+	_layers[path] = [img_tex, tm]
+	_selected_tile = 0
+
+	layer.get_node("MarginContainer/HBoxContainer/CheckBox").emit_signal("toggled", true)

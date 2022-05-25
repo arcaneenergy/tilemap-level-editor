@@ -1,10 +1,7 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
-[ext_resource path="res://4 Walls, Floor & Doors.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
-
-[sub_resource type="TileSet" id=6]
 
 [sub_resource type="DynamicFont" id=2]
 use_mipmaps = true
@@ -475,12 +472,11 @@ WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
 WindowDialog/styles/panel = SubResource( 4 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 16, 16 )
-
 [node name="Node" type="Node2D"]
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
@@ -488,19 +484,21 @@ current = true
 
 [node name="Tilemaps" type="Node2D" parent="."]
 unique_name_in_owner = true
-
-[node name="TileMap" type="TileMap" parent="Tilemaps"]
-tile_set = SubResource( 6 )
-cell_size = Vector2( 16, 16 )
-format = 1
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 input_pass_on_modal_close_click = false
 theme = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Control"]
 anchor_top = 1.0
@@ -535,18 +533,10 @@ size_flags_horizontal = 3
 [node name="TilesetContainer" type="HFlowContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 margin_right = 592.0
-margin_bottom = 64.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
-
-[node name="TextureButton" type="TextureButton" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/ScrollContainer/TilesetContainer"]
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-texture_normal = SubResource( 5 )
-expand = true
 
 [node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
 margin_left = 608.0
