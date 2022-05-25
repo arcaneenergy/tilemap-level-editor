@@ -34,7 +34,7 @@ Button/styles/focus = null
 Button/styles/hover = null
 Button/styles/normal = null
 Button/styles/pressed = null
-CheckBox/colors/font_color = Color( 0, 0, 0, 1 )
+CheckBox/colors/font_color = Color( 1, 1, 1, 1 )
 CheckBox/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 CheckBox/colors/font_color_focus = Color( 0, 0, 0, 1 )
 CheckBox/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -57,7 +57,7 @@ CheckBox/styles/hover = null
 CheckBox/styles/hover_pressed = null
 CheckBox/styles/normal = null
 CheckBox/styles/pressed = null
-CheckButton/colors/font_color = Color( 0, 0, 0, 1 )
+CheckButton/colors/font_color = Color( 1, 1, 1, 1 )
 CheckButton/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 CheckButton/colors/font_color_focus = Color( 0, 0, 0, 1 )
 CheckButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -105,9 +105,9 @@ ColorPresetButton/icons/preset_bg_icon = null
 ColorPresetButton/styles/preset_fg = null
 Dialogs/constants/button_margin = 0
 Dialogs/constants/margin = 0
-FileDialog/colors/file_icon_modulate = Color( 0, 0, 0, 1 )
-FileDialog/colors/files_disabled = Color( 0, 0, 0, 1 )
-FileDialog/colors/folder_icon_modulate = Color( 0, 0, 0, 1 )
+FileDialog/colors/file_icon_modulate = Color( 1, 1, 1, 1 )
+FileDialog/colors/files_disabled = Color( 0.952941, 0.952941, 0.952941, 1 )
+FileDialog/colors/folder_icon_modulate = Color( 1, 1, 1, 1 )
 FileDialog/icons/file = null
 FileDialog/icons/folder = null
 FileDialog/icons/parent_folder = null
@@ -184,7 +184,7 @@ HSplitContainer/constants/separation = 0
 HSplitContainer/icons/grabber = null
 HSplitContainer/styles/bg = null
 Icons/icons/close = null
-ItemList/colors/font_color = Color( 0, 0, 0, 1 )
+ItemList/colors/font_color = Color( 1, 1, 1, 1 )
 ItemList/colors/font_color_selected = Color( 0, 0, 0, 1 )
 ItemList/colors/guide_color = Color( 0, 0, 0, 1 )
 ItemList/constants/hseparation = 0
@@ -207,13 +207,13 @@ Label/constants/shadow_offset_x = 0
 Label/constants/shadow_offset_y = 0
 Label/fonts/font = SubResource( 2 )
 Label/styles/normal = null
-LineEdit/colors/clear_button_color = Color( 0, 0, 0, 1 )
+LineEdit/colors/clear_button_color = Color( 1, 1, 1, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 0, 0, 0, 1 )
-LineEdit/colors/cursor_color = Color( 0, 0, 0, 1 )
-LineEdit/colors/font_color = Color( 0, 0, 0, 1 )
-LineEdit/colors/font_color_selected = Color( 0, 0, 0, 1 )
+LineEdit/colors/cursor_color = Color( 1, 1, 1, 1 )
+LineEdit/colors/font_color = Color( 1, 1, 1, 1 )
+LineEdit/colors/font_color_selected = Color( 1, 1, 1, 1 )
 LineEdit/colors/font_color_uneditable = Color( 0, 0, 0, 1 )
-LineEdit/colors/selection_color = Color( 0, 0, 0, 1 )
+LineEdit/colors/selection_color = Color( 0.721569, 0.592157, 0.329412, 1 )
 LineEdit/constants/minimum_spaces = 0
 LineEdit/fonts/font = SubResource( 2 )
 LineEdit/icons/clear = null
@@ -243,10 +243,10 @@ MenuButton/styles/focus = null
 MenuButton/styles/hover = null
 MenuButton/styles/normal = null
 MenuButton/styles/pressed = null
-OptionButton/colors/font_color = Color( 0, 0, 0, 1 )
+OptionButton/colors/font_color = Color( 1, 1, 1, 1 )
 OptionButton/colors/font_color_disabled = Color( 0, 0, 0, 1 )
-OptionButton/colors/font_color_focus = Color( 0, 0, 0, 1 )
-OptionButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
+OptionButton/colors/font_color_focus = Color( 1, 1, 1, 1 )
+OptionButton/colors/font_color_hover = Color( 1, 1, 1, 1 )
 OptionButton/colors/font_color_pressed = Color( 0, 0, 0, 1 )
 OptionButton/constants/arrow_margin = 0
 OptionButton/constants/hseparation = 0
@@ -381,7 +381,7 @@ TextEdit/styles/completion = null
 TextEdit/styles/focus = null
 TextEdit/styles/normal = null
 TextEdit/styles/read_only = null
-ToolButton/colors/font_color = Color( 0, 0, 0, 1 )
+ToolButton/colors/font_color = Color( 1, 1, 1, 1 )
 ToolButton/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 ToolButton/colors/font_color_focus = Color( 0, 0, 0, 1 )
 ToolButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -401,8 +401,8 @@ TooltipLabel/fonts/font = SubResource( 2 )
 TooltipPanel/styles/panel = null
 Tree/colors/custom_button_font_highlight = Color( 0, 0, 0, 1 )
 Tree/colors/drop_position_color = Color( 0, 0, 0, 1 )
-Tree/colors/font_color = Color( 0, 0, 0, 1 )
-Tree/colors/font_color_selected = Color( 0, 0, 0, 1 )
+Tree/colors/font_color = Color( 1, 1, 1, 1 )
+Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
 Tree/colors/guide_color = Color( 0, 0, 0, 1 )
 Tree/colors/relationship_line_color = Color( 0, 0, 0, 1 )
 Tree/colors/title_button_color = Color( 0, 0, 0, 1 )
@@ -462,7 +462,7 @@ VSplitContainer/constants/autohide = 0
 VSplitContainer/constants/separation = 0
 VSplitContainer/icons/grabber = null
 VSplitContainer/styles/bg = null
-WindowDialog/colors/title_color = Color( 0, 0, 0, 1 )
+WindowDialog/colors/title_color = Color( 1, 1, 1, 1 )
 WindowDialog/constants/close_h_ofs = 0
 WindowDialog/constants/close_v_ofs = 0
 WindowDialog/constants/scaleborder_size = 0
@@ -470,19 +470,19 @@ WindowDialog/constants/title_height = 0
 WindowDialog/fonts/title_font = SubResource( 2 )
 WindowDialog/icons/close = null
 WindowDialog/icons/close_highlight = null
-WindowDialog/styles/panel = null
+WindowDialog/styles/panel = SubResource( 4 )
 
-[node name="Node" type="Node"]
+[node name="Node" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Camera2D" type="Camera2D" parent="Node2D"]
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
 current = true
 
-[node name="Tilemaps" type="Node2D" parent="Node2D"]
+[node name="Tilemaps" type="Node2D" parent="."]
+unique_name_in_owner = true
 
-[node name="TileMap" type="TileMap" parent="Node2D/Tilemaps"]
+[node name="TileMap" type="TileMap" parent="Tilemaps"]
 cell_size = Vector2( 16, 16 )
 format = 1
 

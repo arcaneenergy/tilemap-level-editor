@@ -1,7 +1,7 @@
-extends Node
+extends Node2D
 
-onready var _camera: Camera2D = $Node2D/Camera2D
-onready var _tm: TileMap = $Node2D/TileMap
+onready var _camera: Camera2D = $"%Camera2D"
+onready var _tms: Node2D = $"%Tilemaps"
 onready var _cl: CanvasLayer = $CanvasLayer
 onready var _ts_container: Control = $"%TilesetContainer"
 onready var _layers: Control = $"%Layers"
@@ -26,23 +26,23 @@ func _process(delta: float) -> void:
 		_camera.position.x += CAMERA_MOVE_SPEED * delta
 
 	if Input.is_action_pressed("drag"):
-		_camera.position += _initial_drag_pos - _tm.get_global_mouse_position()
+		_camera.position += _initial_drag_pos - get_global_mouse_position()
 
 func _unhandled_input(event: InputEvent) -> void:
 
 	if Input.is_action_pressed("place"):
-		var pos = _tm.get_global_mouse_position() / 16
-		_tm.set_cell(pos.x, pos.y, 0)
+		var pos = get_global_mouse_position() / 16
+#		_tm.set_cell(pos.x, pos.y, 0)
 
 	if Input.is_action_pressed("delete"):
-		var pos = _tm.get_global_mouse_position() / 16
-		_tm.set_cell(pos.x, pos.y, -1)
+		var pos = get_global_mouse_position() / 16
+#		_tm.set_cell(pos.x, pos.y, -1)
 
 	if Input.is_action_just_pressed("toggle_gui"):
 		_cl.visible = !_cl.visible
 
 	if Input.is_action_just_pressed("drag"):
-		_initial_drag_pos = _tm.get_global_mouse_position()
+		_initial_drag_pos = get_global_mouse_position()
 
 	if Input.is_action_just_pressed("zoom_in"):
 		_camera.zoom -= Vector2.ONE * 0.01
@@ -54,13 +54,13 @@ func _on_ButtonNewLayer_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_ButtonImport_pressed() -> void:
-	pass # Replace with function body.
+	_fd_import.popup()
 
 func _on_ButtonExport_pressed() -> void:
-	pass # Replace with function body.
+	_fd_export.popup()
 
 func _on_FileDialogImportJson_file_selected(path: String) -> void:
-	pass # Replace with function body.
+	pass
 
 func _on_FileDialogExportJson_file_selected(path: String) -> void:
-	pass # Replace with function body.
+	pass
