@@ -89,17 +89,18 @@ func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
+	_clear_ts_container()
 	_set_selection(-1)
 
 	for i in _layer_container.get_children():
 		i.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(false)
 		i.self_modulate = Color.white
-	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
-	layer.self_modulate = Color.blue
 
-	if _current_layer == layer.get_meta("path"): return
-
-	_clear_ts_container()
+	if button_pressed:
+		layer.get_node("MarginContainer/VBoxContainer/HBoxContainer/CheckBox").set_pressed_no_signal(true)
+		layer.self_modulate = Color.blue
+	else:
+		return
 
 	var img_tex := _layers[layer.get_meta("path")]["tex"] as ImageTexture
 	var idx := 0
@@ -148,6 +149,12 @@ func _update_layers() -> void:
 	for l in _layer_container.get_children():
 		l.get_node("LabelIndex").text = "#%d" % i
 		i += 1
+
+		l.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").disabled = false
+		l.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDown").disabled = false
+
+	_layer_container.get_child(0).get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").disabled = true
+	_layer_container.get_child(_layer_container.get_child_count() - 1).get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonDown").disabled = true
 
 func _clear_ts_container() -> void:
 	for i in _ts_container.get_children():
