@@ -491,6 +491,7 @@ format = 1
 [node name="Control" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+input_pass_on_modal_close_click = false
 theme = SubResource( 3 )
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Control"]
@@ -498,10 +499,12 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -247.0
+input_pass_on_modal_close_click = false
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+input_pass_on_modal_close_click = false
 custom_constants/margin_right = 16
 custom_constants/margin_top = 16
 custom_constants/margin_left = 16
@@ -512,71 +515,92 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = 1264.0
 margin_bottom = 231.0
+input_pass_on_modal_close_click = false
 custom_constants/separation = 16
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_right = 672.0
+margin_right = 592.0
 margin_bottom = 215.0
+input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 
 [node name="TilesetContainer" type="HFlowContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 672.0
+margin_right = 592.0
+input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
 
 [node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 688.0
-margin_right = 688.0
+margin_left = 608.0
+margin_right = 608.0
 margin_bottom = 215.0
+input_pass_on_modal_close_click = false
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 704.0
-margin_right = 960.0
+margin_left = 624.0
+margin_right = 944.0
 margin_bottom = 215.0
-rect_min_size = Vector2( 256, 0 )
+rect_min_size = Vector2( 320, 0 )
+input_pass_on_modal_close_click = false
 custom_constants/separation = 16
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_right = 256.0
+margin_right = 320.0
 margin_bottom = 171.0
+input_pass_on_modal_close_click = false
 size_flags_vertical = 3
 
 [node name="Layers" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 256.0
+margin_right = 320.0
+input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/separation = 16
 
 [node name="ButtonNewLayer" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
 margin_top = 187.0
-margin_right = 256.0
+margin_right = 320.0
 margin_bottom = 215.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
 text = "+ New Layer"
 
 [node name="VSeparator2" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 976.0
-margin_right = 976.0
+margin_left = 960.0
+margin_right = 960.0
 margin_bottom = 215.0
+input_pass_on_modal_close_click = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_left = 992.0
-margin_right = 1248.0
+margin_left = 976.0
+margin_right = 1232.0
 margin_bottom = 215.0
 rect_min_size = Vector2( 256, 0 )
+input_pass_on_modal_close_click = false
 custom_constants/separation = 16
 
 [node name="ButtonImport" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_right = 256.0
 margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
 text = "Import .json"
 
 [node name="ButtonExport" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 44.0
 margin_right = 256.0
 margin_bottom = 72.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
 text = "Export .json"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
+margin_left = 1248.0
+margin_right = 1248.0
+margin_bottom = 215.0
+input_pass_on_modal_close_click = false
 
 [node name="FileDialogImportJson" type="FileDialog" parent="CanvasLayer/Control"]
 unique_name_in_owner = true
@@ -588,6 +612,7 @@ margin_left = -358.0
 margin_top = -181.0
 margin_right = 358.0
 margin_bottom = 181.0
+input_pass_on_modal_close_click = false
 window_title = "Datei öffnen"
 resizable = true
 mode = 0
@@ -604,9 +629,28 @@ margin_left = -358.0
 margin_top = -181.0
 margin_right = 358.0
 margin_bottom = 181.0
+input_pass_on_modal_close_click = false
 window_title = "Datei speichern"
 resizable = true
 access = 2
+show_hidden_files = true
+
+[node name="FileDialogNewLayer" type="FileDialog" parent="CanvasLayer/Control"]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -358.0
+margin_top = -181.0
+margin_right = 358.0
+margin_bottom = 181.0
+input_pass_on_modal_close_click = false
+window_title = "Datei öffnen"
+resizable = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.png", "*.jpg", "*.jpeg" )
 show_hidden_files = true
 
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
@@ -614,3 +658,4 @@ show_hidden_files = true
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonExport" to="." method="_on_ButtonExport_pressed"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogImportJson" to="." method="_on_FileDialogImportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogExportJson" to="." method="_on_FileDialogExportJson_file_selected"]
+[connection signal="file_selected" from="CanvasLayer/Control/FileDialogNewLayer" to="." method="_on_FileDialogNewLayer_file_selected"]

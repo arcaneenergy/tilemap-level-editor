@@ -4,11 +4,20 @@
 margin_right = 256.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 0, 64 )
+input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
+
+[node name="LabelIndex" type="Label" parent="."]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 45.0
+margin_bottom = 18.0
+input_pass_on_modal_close_click = false
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+input_pass_on_modal_close_click = false
 custom_constants/margin_right = 16
 custom_constants/margin_top = 16
 custom_constants/margin_left = 16
@@ -19,31 +28,50 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = 240.0
 margin_bottom = 48.0
+input_pass_on_modal_close_click = false
 
-[node name="ButtonDelete" type="Button" parent="MarginContainer/HBoxContainer"]
-self_modulate = Color( 1, 0, 0, 1 )
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer"]
 margin_right = 32.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-text = "X"
+rect_min_size = Vector2( 32, 0 )
+focus_mode = 0
+input_pass_on_modal_close_click = false
 
 [node name="Name" type="LineEdit" parent="MarginContainer/HBoxContainer"]
 margin_left = 36.0
-margin_right = 152.0
+margin_right = 116.0
 margin_bottom = 32.0
+focus_mode = 1
+input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 size_flags_vertical = 3
+caret_blink = true
+caret_blink_speed = 0.5
 
 [node name="ButtonUp" type="Button" parent="MarginContainer/HBoxContainer"]
+margin_left = 120.0
+margin_right = 152.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "↑"
+
+[node name="ButtonDown" type="Button" parent="MarginContainer/HBoxContainer"]
 margin_left = 156.0
 margin_right = 188.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-text = "↑"
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "↓"
 
-[node name="ButtonDown" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="ButtonDelete" type="Button" parent="MarginContainer/HBoxContainer"]
+self_modulate = Color( 1, 0, 0, 1 )
 margin_left = 192.0
 margin_right = 224.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-text = "↓"
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "X"

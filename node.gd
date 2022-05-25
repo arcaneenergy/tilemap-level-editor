@@ -7,6 +7,7 @@ onready var _ts_container: Control = $"%TilesetContainer"
 onready var _layer_container: Control = $"%Layers"
 onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
+onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
 
 var _initial_drag_pos: Vector2
 var _layers := []
@@ -52,24 +53,33 @@ func _unhandled_input(event: InputEvent) -> void:
 		_camera.zoom += Vector2.ONE * 0.01
 
 func _on_ButtonNewLayer_pressed() -> void:
-	var layer := preload("res://layer.tscn").instance()
-	layer.get_node("MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/Name").text = "Layer %d" % _layer_container.get_child_count()
-	layer.get_node("MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
-	layer.get_node("MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
-	_layer_container.add_child(layer)
+	_fd_new_layer.popup()
 
-func _on_Layer_deleted(layer: Control) -> void:
-	_layer_container.remove_child(layer)
-	layer.queue_free()
+func _on_Layer_toggled(layer: Control) -> void:
+	pass
 
 func _on_Layer_moved_up(layer: Control) -> void:
-	if layer.get_index() - 1 > 0:
+	if layer.get_index() - 1 >= 0:
 		_layer_container.move_child(layer, layer.get_index() - 1)
+
+	_update_layers()
 
 func _on_Layer_moved_down(layer: Control) -> void:
 	if layer.get_index() + 1 < _layer_container.get_child_count():
 		_layer_container.move_child(layer, layer.get_index() + 1)
+
+	_update_layers()
+
+func _update_layers() -> void:
+	var i := 1
+	for l in _layer_container.get_children():
+		l.get_node("LabelIndex").text = "#%d" % i
+		i += 1
+
+func _on_Layer_deleted(layer: Control) -> void:
+	_layer_container.remove_child(layer)
+	layer.queue_free()
+	_update_layers()
 
 func _on_ButtonImport_pressed() -> void:
 	_fd_import.popup()
@@ -82,3 +92,13 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 
 func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	pass
+
+func _on_FileDialogNewLayer_file_selected(path: String) -> void:
+	var layer := preload("res://layer.tscn").instance()
+	layer.get_node("MarginContainer/HBoxContainer/CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
+	layer.get_node("MarginContainer/HBoxContainer/Name").text = "Layer %d" % _layer_container.get_child_count()
+	layer.get_node("MarginContainer/HBoxContainer/ButtonUp").connect("pressed", self, "_on_Layer_moved_up", [layer])
+	layer.get_node("MarginContainer/HBoxContainer/ButtonDown").connect("pressed", self, "_on_Layer_moved_down", [layer])
+	layer.get_node("MarginContainer/HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Layer_deleted", [layer])
+	_layer_container.add_child(layer)
+	_update_layers()
