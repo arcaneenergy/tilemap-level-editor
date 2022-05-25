@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://node.gd" type="Script" id=1]
 [ext_resource path="res://4 Walls, Floor & Doors.png" type="Texture" id=2]
 [ext_resource path="res://assets/firacode/firacode_medium.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="TileSet" id=6]
 
 [sub_resource type="DynamicFont" id=2]
 use_mipmaps = true
@@ -488,6 +490,7 @@ current = true
 unique_name_in_owner = true
 
 [node name="TileMap" type="TileMap" parent="Tilemaps"]
+tile_set = SubResource( 6 )
 cell_size = Vector2( 16, 16 )
 format = 1
 

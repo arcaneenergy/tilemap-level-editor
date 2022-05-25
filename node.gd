@@ -1,7 +1,7 @@
 extends Node2D
 
 onready var _camera: Camera2D = $"%Camera2D"
-onready var _tms: Node2D = $"%Tilemaps"
+onready var _tm_container: Node2D = $"%Tilemaps"
 onready var _cl: CanvasLayer = $CanvasLayer
 onready var _ts_container: Control = $"%TilesetContainer"
 onready var _layer_container: Control = $"%Layers"
@@ -64,16 +64,22 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 		i.queue_free()
 
 	var img_tex := _layers[layer.get_meta("path")] as ImageTexture
+	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
 			var btn := TextureButton.new()
 			btn.expand = true
 			btn.rect_min_size = Vector2.ONE * 64
+			btn.connect("pressed", self, "_on_TextureButton_pressed", [idx])
 			var at := AtlasTexture.new()
 			at.atlas = img_tex
 			at.region = Rect2(x * 16, y * 16, 16, 16)
 			btn.texture_normal = at
 			_ts_container.add_child(btn)
+			idx += 1
+
+func _on_TextureButton_pressed(idx: int) -> void:
+	print(idx)
 
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
@@ -131,6 +137,14 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	elif path.ends_with(".jpg") or path.ends_with(".jpeg"):
 		data = img.load_jpg_from_buffer(buffer)
 	var img_tex := ImageTexture.new()
-	img_tex.create_from_image(img)
+	img_tex.create_from_image(img, 1 | 2)
 	file.close()
 	_layers[path] = img_tex
+
+	var tm := TileMap.new()
+	tm.cell_size = Vector2(16, 16)
+	var ts := TileSet.new()
+	ts.create_tile(_layers.size())
+	ts.tile_set_texture(_layers.size(), img_tex)
+	tm.tile_set = ts
+	_tm_container.add_child(tm)
