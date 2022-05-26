@@ -10,9 +10,11 @@ config_version=4
 
 [application]
 
-config/name="Tilemap Level"
+config/name="Tilemap Level Editor"
 run/main_scene="res://node.tscn"
 boot_splash/show_image=false
+config/icon="res://assets/sprites/icon.png"
+config/windows_native_icon="res://assets/sprites/icon.ico"
 
 [display]
 
