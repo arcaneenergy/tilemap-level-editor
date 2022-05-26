@@ -20,8 +20,7 @@ onready var _window_dialog_info: WindowDialog = $"%WindowDialogInfo"
 enum BrushShape { CIRCLE, SQUARE }
 
 var _initial_drag_pos: Vector2
-var _layers := {}
-var _current_layer := ""
+var _current_layer := -1
 var _selected_tile := -1
 var _current_shape := 0
 var _current_size := 1
@@ -71,17 +70,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		c.position = place_pos * 64 + Vector2.ONE * 32 + c.offset_pos
 	_lbl_position.text = "%s\n%d" % [place_pos, _selected_tile]
 
-	if _current_layer.empty(): return
+	if _current_layer == -1: return
 
 	if Input.is_action_pressed("place"):
 		for i in _cursors:
-			_layers[_current_layer]["tm"].set_cellv(
+			_layer_container.get_child(_current_layer).get_meta("tm").set_cellv(
 				Vector2(floor(i.position.x / 64), floor(i.position.y / 64)),
 				_selected_tile)
 
 	if Input.is_action_pressed("delete"):
 		for i in _cursors:
-			_layers[_current_layer]["tm"].set_cellv(
+			_layer_container.get_child(_current_layer).get_meta("tm").set_cellv(
 				Vector2(floor(i.position.x / 64), floor(i.position.y / 64)),
 				-1)
 
@@ -102,7 +101,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	else:
 		return
 
-	var img_tex := _layers[layer.get_meta("path")]["tex"] as ImageTexture
+	var img_tex := layer.get_meta("tex") as ImageTexture
 	var idx := 0
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
@@ -115,7 +114,7 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 			_ts_container.add_child(btn)
 			idx += 1
 
-	_current_layer = layer.get_meta("path")
+	_current_layer = layer.get_index()
 #	_update_cell_size()
 
 func _set_selection(idx: int) -> void:
@@ -134,14 +133,14 @@ func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
 		var new_idx := layer.get_index() - 1
 		_layer_container.move_child(layer, new_idx)
-		_tm_container.move_child(_layers[layer.get_meta("path")]["tm"], new_idx)
+		_tm_container.move_child(layer.get_meta("tm"), new_idx)
 	_update_layers()
 
 func _on_Layer_moved_down(layer: Control) -> void:
 	if layer.get_index() + 1 < _layer_container.get_child_count():
 		var new_idx := layer.get_index() + 1
 		_layer_container.move_child(layer, new_idx)
-		_tm_container.move_child(_layers[layer.get_meta("path")]["tm"], new_idx)
+		_tm_container.move_child(layer.get_meta("tm"), new_idx)
 	_update_layers()
 
 func _update_layers() -> void:
@@ -162,12 +161,11 @@ func _clear_ts_container() -> void:
 
 func _on_Layer_deleted(layer: Control) -> void:
 	_clear_ts_container()
-	_layers[layer.get_meta("path")]["tm"].queue_free()
-	_layer_container.remove_child(layer)
-	_layers.erase(layer.get_meta("path"))
+	layer.get_meta("tm").queue_free()
+#	_layer_container.remove_child(layer)
 	layer.queue_free()
 	_update_layers()
-	_current_layer = ""
+	_current_layer = -1
 	_set_selection(-1)
 
 func _on_ButtonImport_pressed() -> void:
@@ -185,10 +183,10 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 	var json_result := JSON.parse(text)
 	if json_result.error == OK:
 		for p in json_result.result:
-			_create_layer(p["texture"])
-
+			var layer := _create_layer(p["texture_path"])
+			var tm := layer.get_meta("tm") as TileMap
 			for c in p["cells"]:
-				_layers[p["texture"]]["tm"].set_cell(c[1], c[2], c[0])
+				tm.set_cell(c[1], c[2], c[0])
 
 	file.close()
 
@@ -197,12 +195,12 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	file.open(path, File.WRITE)
 
 	var data := []
-	for lay in _layers.keys():
+	for lay in _layer_container.get_children():
 		var a := {
-			"texture": lay,
+			"texture_path": lay.get_meta("tex_path"),
 			"cells": [],
 		}
-		var tm: TileMap = _layers[lay]["tm"]
+		var tm := lay.get_meta("tm") as TileMap
 		for c in tm.get_used_cells():
 			a["cells"].push_back([tm.get_cellv(c), c.x, c.y])
 		data.push_back(a)
@@ -213,8 +211,8 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_create_layer(path)
 
-func _create_layer(path: String) -> void:
-	var layer := preload("res://layer.tscn").instance()
+func _create_layer(path: String) -> Control:
+	var layer := preload("res://layer.tscn").instance() as Control
 	layer.set_meta("path", path)
 	var hbox := layer.get_node("MarginContainer/VBoxContainer/HBoxContainer")
 	hbox.get_node("CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
@@ -259,14 +257,14 @@ func _create_layer(path: String) -> void:
 	tm.scale = Vector2.ONE * 4
 	_tm_container.add_child(tm)
 
-	_layers[path] = {
-		"tex": img_tex,
-		"tm": tm,
-		"size": 16
-	}
+	layer.set_meta("tex", img_tex)
+	layer.set_meta("tex_path", path)
+	layer.set_meta("tm", tm)
+#	layer.set_meta("size", size)
 
 	hbox.get_node("CheckBox").emit_signal("toggled", true)
 #	_update_cell_size()
+	return layer
 
 #func _on_HSliderSize_value_changed(value: float, layer: Control) -> void:
 #	layer.get_node("MarginContainer/VBoxContainer/HBoxContainer2/HSliderSize/Label").text = str(value)
