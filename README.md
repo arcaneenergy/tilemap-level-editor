@@ -19,11 +19,35 @@ Download the exported program on itch.io.
 
 [**itch.io download link**](https://arcaneenergy.itch.io/tilemap-level-editor)
 
+## Video
+
+[<img src="https://img.youtube.com/vi/cAaTXmgWu9s/maxresdefault.jpg" width="50%">](https://youtu.be/cAaTXmgWu9s)
+
 ## Use case
 
 This is currently used in a personal project. It's used to load in JSON files into Godot to recreate the levels at runtime. The exported JSON file contains all levels and individual cells. This makes it easy to recreate the level in Godot.
 
 Alternatively, you can use this program to easily create levels in the editor.
+
+## Controls
+
+Placement:
+- Left click: Place tile (if selected)
+- Right click: Delete tile
+
+Other:
+- TAB: Toggle GUI
+- SHIFT + Scroll up: Increase brush size
+- SHIFT + Scroll down: Decrease brush size
+
+Camera:
+- Middle mouse drag: Drag camera around
+- W / ↑: Move camera up
+- S / ↓: Move camera down
+- A / ←: Move camera left
+- D / →: Move camera right
+- Mouse scroll up: Zoom in
+- Mouse scroll down: Zoom out
 
 ## UI Overview
 
