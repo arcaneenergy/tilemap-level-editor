@@ -1,7 +1,7 @@
 extends WindowDialog
 
 func _on_ButtonGithub_pressed() -> void:
-	OS.shell_open("https://github.com/arcaneenergy/tilemap-level")
+	OS.shell_open("https://github.com/arcaneenergy/tilemap-level-editor")
 
 func _on_ButtonYouTube_pressed() -> void:
 	OS.shell_open("https://www.youtube.com/c/ArcaneEnergy")

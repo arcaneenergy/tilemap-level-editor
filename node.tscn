@@ -752,6 +752,7 @@ show_hidden_files = true
 
 [node name="WindowDialogInfo" type="WindowDialog" parent="CanvasLayer/Control"]
 unique_name_in_owner = true
+visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -781,9 +782,9 @@ custom_constants/separation = 16
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_top = 12.0
+margin_top = 34.0
 margin_right = 802.0
-margin_bottom = 76.0
+margin_bottom = 98.0
 custom_constants/separation = 16
 alignment = 1
 
@@ -806,14 +807,22 @@ align = 1
 valign = 1
 
 [node name="HSeparator" type="HSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_top = 92.0
+margin_top = 114.0
 margin_right = 802.0
-margin_bottom = 92.0
+margin_bottom = 114.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_top = 108.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 130.0
 margin_right = 802.0
-margin_bottom = 284.0
+margin_bottom = 306.0
+custom_constants/separation = 16
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer3"]
+margin_right = 385.0
+margin_bottom = 176.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
 bbcode_enabled = true
 bbcode_text = "[center]
 Tilemap Level Editor
@@ -833,36 +842,66 @@ Contact: arcane.energy.help@gmail.com
 "
 fit_content_height = true
 
-[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_top = 300.0
-margin_right = 802.0
-margin_bottom = 300.0
+[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 401.0
+margin_right = 401.0
+margin_bottom = 176.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
 
-[node name="ButtonGithub" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_left = 300.0
-margin_top = 316.0
-margin_right = 502.0
-margin_bottom = 344.0
-size_flags_horizontal = 4
-text = "GitHub Project Page"
+[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 417.0
+margin_right = 802.0
+margin_bottom = 176.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+bbcode_enabled = true
+bbcode_text = "Left click: Place tile (if selected)
+Right click: Delete tile
+TAB: Toggle GUI
+SHIFT + Scroll up/down: Increase/Decrease brush size
+Middle mouse drag: Drag camera around
+W/A/S/D/↑/↓/←/→: Move camera
+Mouse scroll up/down: Zoom in/out"
+text = "Left click: Place tile (if selected)
+Right click: Delete tile
+TAB: Toggle GUI
+SHIFT + Scroll up/down: Increase/Decrease brush size
+Middle mouse drag: Drag camera around
+W/A/S/D/↑/↓/←/→: Move camera
+Mouse scroll up/down: Zoom in/out"
+fit_content_height = true
+
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
+margin_top = 322.0
+margin_right = 802.0
+margin_bottom = 322.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer"]
-margin_top = 360.0
+margin_top = 338.0
 margin_right = 802.0
-margin_bottom = 388.0
+margin_bottom = 366.0
 custom_constants/separation = 16
 alignment = 1
 
+[node name="ButtonGithub" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 156.0
+margin_right = 358.0
+margin_bottom = 28.0
+size_flags_horizontal = 4
+text = "GitHub Project Page"
+
 [node name="ButtonYouTube" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 265.0
-margin_right = 393.0
+margin_left = 374.0
+margin_right = 502.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 128, 0 )
 text = "YouTube"
 
 [node name="ButtonWebsite" type="Button" parent="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 409.0
-margin_right = 537.0
+margin_left = 518.0
+margin_right = 646.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 128, 0 )
 text = "Website"
@@ -889,6 +928,6 @@ autowrap = true
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogImportJson" to="." method="_on_FileDialogImportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogExportJson" to="." method="_on_FileDialogExportJson_file_selected"]
 [connection signal="file_selected" from="CanvasLayer/Control/FileDialogNewLayer" to="." method="_on_FileDialogNewLayer_file_selected"]
-[connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/ButtonGithub" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonGithub_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonGithub" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonGithub_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonYouTube" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonYouTube_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonWebsite" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonWebsite_pressed"]

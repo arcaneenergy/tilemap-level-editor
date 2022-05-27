@@ -20,8 +20,7 @@ Download the exported program on itch.io.
 [**itch.io download link**](https://arcaneenergy.itch.io/tilemap-level-editor)
 
 ## Video
-
-[<img src="https://img.youtube.com/vi/cAaTXmgWu9s/maxresdefault.jpg" width="50%">](https://youtu.be/cAaTXmgWu9s)
+[<img src="https://img.youtube.com/vi/01ktb-9E6J0/maxresdefault.jpg" width="50%">](https://youtu.be/01ktb-9E6J0)
 
 ## Use case
 
@@ -89,5 +88,9 @@ The exported JSON file looks like this:
 ```
 
 Each cell contains an ID, an x and a y position. The ID is used to identify which cell in the tileset it refers to.
+
+## Problems
+
+- [ ] Currently the program only supports tiles of 16x16 size. The spritesheet needs to be divisible by 16 (16, 32, 48, 64, 80, 96, 112, 128, etc.)
 
 Godot_v3.5-rc2
