@@ -752,7 +752,6 @@ show_hidden_files = true
 
 [node name="WindowDialogInfo" type="WindowDialog" parent="CanvasLayer/Control"]
 unique_name_in_owner = true
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
