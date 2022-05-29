@@ -93,20 +93,7 @@ func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
 func _on_ButtonNewObject_pressed() -> void:
-	var obj_item := OBJECT_ITEM.instance() as Control
-	var vbox := obj_item.get_node("MarginContainer/VBoxContainer")
-	vbox.get_node("HBoxContainer/Key").connect("text_changed", self, "_on_Object_text_changed", [obj_item])
-	vbox.get_node("HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Object_deleted", [obj_item])
-	vbox.get_node("HBoxContainer2/PosX").connect("text_changed", self, "_on_Object_pos_x_changed", [obj_item])
-	vbox.get_node("HBoxContainer2/PosY").connect("text_changed", self, "_on_Object_pos_y_changed", [obj_item])
-	_objects_list.add_child(obj_item)
-
-	var obj := OBJECT.instance() as Node2D
-	_objects_container.add_child(obj)
-
-	obj_item.set_meta("obj", obj)
-
-	_update_obj(obj_item)
+	_create_object()
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	_clear_ts_container()
@@ -210,11 +197,13 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 
 	var json_result := JSON.parse(text)
 	if json_result.error == OK:
-		for p in json_result.result:
+		for p in json_result.result["layers"]:
 			var layer := _create_layer(p["texture_path"])
 			var tm := layer.get_meta("tm") as TileMap
 			for c in p["cells"]:
 				tm.set_cell(c[1], c[2], c[0])
+		for p in json_result.result["objects"]:
+			_create_object(p)
 
 	file.close()
 
@@ -222,7 +211,10 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	var file := File.new()
 	file.open(path, File.WRITE)
 
-	var data := []
+	var data := {
+		"layers": [],
+		"objects": [],
+	}
 	for lay in _layer_container.get_children():
 		var a := {
 			"texture_path": lay.get_meta("tex_path"),
@@ -231,7 +223,15 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 		var tm := lay.get_meta("tm") as TileMap
 		for c in tm.get_used_cells():
 			a["cells"].push_back([tm.get_cellv(c), c.x, c.y])
-		data.push_back(a)
+		data["layers"].push_back(a)
+	for obj_item in _objects_list.get_children():
+		data["objects"].push_back({
+			"key": obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text,
+			"position": [
+				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
+				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text),
+			],
+		})
 
 	file.store_string(JSON.print(data))
 	file.close()
@@ -386,3 +386,29 @@ func _update_obj(obj_item: Control) -> void:
 	obj.position = Vector2(
 		64 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
 		64 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text))
+
+func _create_object(data := {}) -> void:
+	var obj_item := OBJECT_ITEM.instance() as Control
+	var vbox := obj_item.get_node("MarginContainer/VBoxContainer")
+
+	var key := vbox.get_node("HBoxContainer/Key")
+	var pos_x := vbox.get_node("HBoxContainer2/PosX")
+	var pos_y := vbox.get_node("HBoxContainer2/PosY")
+
+	if data:
+		key.text = data["key"]
+		pos_x.text = str(data["position"][0])
+		pos_y.text = str(data["position"][1])
+
+	key.connect("text_changed", self, "_on_Object_text_changed", [obj_item])
+	vbox.get_node("HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Object_deleted", [obj_item])
+	pos_x.connect("text_changed", self, "_on_Object_pos_x_changed", [obj_item])
+	pos_y.connect("text_changed", self, "_on_Object_pos_y_changed", [obj_item])
+	_objects_list.add_child(obj_item)
+
+	var obj := OBJECT.instance() as Node2D
+	_objects_container.add_child(obj)
+
+	obj_item.set_meta("obj", obj)
+
+	_update_obj(obj_item)
