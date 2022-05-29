@@ -518,6 +518,12 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Objects" type="Node2D" parent="."]
+unique_name_in_owner = true
+__meta__ = {
+"_edit_lock_": true
+}
+
 [node name="CursorContainer" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -636,7 +642,7 @@ margin_right = 320.0
 margin_bottom = 56.0
 custom_constants/separation = 16
 
-[node name="Objects" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder"]
+[node name="ObjectsList" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder"]
 unique_name_in_owner = true
 margin_top = -28.0
 margin_right = 320.0

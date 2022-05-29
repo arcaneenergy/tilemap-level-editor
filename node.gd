@@ -5,7 +5,8 @@ onready var _tm_container: Node2D = $"%Tilemaps"
 onready var _cl: CanvasLayer = $CanvasLayer
 onready var _ts_container: Control = $"%TilesetContainer"
 onready var _layer_container: Control = $"%Layers"
-onready var _objects_container: Control = $"%Objects"
+onready var _objects_list: Control = $"%ObjectsList"
+onready var _objects_container: Node2D = $"%Objects"
 onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
@@ -30,6 +31,9 @@ var _cursors := []
 const CAMERA_MOVE_SPEED := 100
 const CURSOR := preload("res://cursor.tscn")
 const TILE_BTN := preload("res://tile_button.tscn")
+const LAYER := preload("res://layer.tscn")
+const OBJECT_ITEM := preload("res://object_item.tscn")
+const OBJECT := preload("res://object.tscn")
 
 func _ready() -> void:
 	_set_new_cursor_shape()
@@ -89,7 +93,20 @@ func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
 
 func _on_ButtonNewObject_pressed() -> void:
-	pass # Replace with function body.
+	var obj_item := OBJECT_ITEM.instance() as Control
+	var vbox := obj_item.get_node("MarginContainer/VBoxContainer")
+	vbox.get_node("HBoxContainer/Key").connect("text_changed", self, "_on_Object_text_changed", [obj_item])
+	vbox.get_node("HBoxContainer/ButtonDelete").connect("pressed", self, "_on_Object_deleted", [obj_item])
+	vbox.get_node("HBoxContainer2/PosX").connect("text_changed", self, "_on_Object_pos_x_changed", [obj_item])
+	vbox.get_node("HBoxContainer2/PosY").connect("text_changed", self, "_on_Object_pos_y_changed", [obj_item])
+	_objects_list.add_child(obj_item)
+
+	var obj := OBJECT.instance() as Node2D
+	_objects_container.add_child(obj)
+
+	obj_item.set_meta("obj", obj)
+
+	_update_obj(obj_item)
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	_clear_ts_container()
@@ -223,7 +240,7 @@ func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_create_layer(path)
 
 func _create_layer(path: String) -> Control:
-	var layer := preload("res://layer.tscn").instance() as Control
+	var layer := LAYER.instance() as Control
 	layer.set_meta("path", path)
 	var hbox := layer.get_node("MarginContainer/VBoxContainer/HBoxContainer")
 	hbox.get_node("CheckBox").connect("toggled", self, "_on_Layer_toggled", [layer])
@@ -340,12 +357,32 @@ func _on_ButtonInfo_pressed() -> void:
 
 func _on_ButtonLayers_pressed() -> void:
 	_layer_container.get_parent().visible = true
-	_objects_container.get_parent().visible = false
+	_objects_list.get_parent().visible = false
 	$"%ButtonLayers".set_pressed_no_signal(true)
 	$"%ButtonObjects".set_pressed_no_signal(false)
 
 func _on_ButtoObjects_pressed() -> void:
 	_layer_container.get_parent().visible = false
-	_objects_container.get_parent().visible = true
+	_objects_list.get_parent().visible = true
 	$"%ButtonLayers".set_pressed_no_signal(false)
 	$"%ButtonObjects".set_pressed_no_signal(true)
+
+func _on_Object_text_changed(text: String, obj_item: Control) -> void:
+	_update_obj(obj_item)
+
+func _on_Object_deleted(obj_item: Control) -> void:
+	obj_item.get_meta("obj").queue_free()
+	obj_item.queue_free()
+
+func _on_Object_pos_x_changed(text: String, obj_item: Control) -> void:
+	_update_obj(obj_item)
+
+func _on_Object_pos_y_changed(text: String, obj_item: Control) -> void:
+	_update_obj(obj_item)
+
+func _update_obj(obj_item: Control) -> void:
+	var obj := obj_item.get_meta("obj") as Node2D
+	obj.get_node("Label").text = obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text
+	obj.position = Vector2(
+		16 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
+		16 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text))
