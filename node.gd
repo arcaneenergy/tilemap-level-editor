@@ -151,9 +151,9 @@ func _on_Layer_moved_down(layer: Control) -> void:
 	_update_layers()
 
 func _update_layers() -> void:
-	var i := 1
+	var i := 0
 	for l in _layer_container.get_children():
-		l.get_node("LabelIndex").text = "#%d" % i
+		l.get_node("LabelIndex").text = str(i)
 		i += 1
 
 		l.get_node("MarginContainer/VBoxContainer/HBoxContainer/ButtonUp").disabled = false

@@ -2,7 +2,7 @@
 
 ![Banner](readme/banner.png)
 
-Open source simple level editor for Godot with JSON export functionality. Made with Godot.
+Simple level editor for Godot with JSON export functionality. Made with Godot.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E5CVWWE)
 
@@ -91,6 +91,7 @@ Each cell contains an ID, an x and a y position. The ID is used to identify whic
 
 ## Problems
 
-- [ ] Currently the program only supports tiles of 16x16 size. The spritesheet needs to be divisible by 16 (16, 32, 48, 64, 80, 96, 112, 128, etc.)
+- [ ] Currently the program only supports tiles of 16x16 size. The spritesheet needs to be divisible by 16 (16, 32, 48, 64 etc.)
+- [ ] Exported texture paths are absolute.
 
 Godot_v3.5-rc2
