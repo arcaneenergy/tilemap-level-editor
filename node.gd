@@ -5,6 +5,7 @@ onready var _tm_container: Node2D = $"%Tilemaps"
 onready var _cl: CanvasLayer = $CanvasLayer
 onready var _ts_container: Control = $"%TilesetContainer"
 onready var _layer_container: Control = $"%Layers"
+onready var _objects_container: Control = $"%Objects"
 onready var _fd_import: FileDialog = $"%FileDialogImportJson"
 onready var _fd_export: FileDialog = $"%FileDialogExportJson"
 onready var _fd_new_layer: FileDialog = $"%FileDialogNewLayer"
@@ -86,6 +87,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_ButtonNewLayer_pressed() -> void:
 	_fd_new_layer.popup()
+
+func _on_ButtonNewObject_pressed() -> void:
+	pass # Replace with function body.
 
 func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	_clear_ts_container()
@@ -333,3 +337,15 @@ func _set_new_cursor_shape() -> void:
 
 func _on_ButtonInfo_pressed() -> void:
 	_window_dialog_info.popup()
+
+func _on_ButtonLayers_pressed() -> void:
+	_layer_container.get_parent().visible = true
+	_objects_container.get_parent().visible = false
+	$"%ButtonLayers".set_pressed_no_signal(true)
+	$"%ButtonObjects".set_pressed_no_signal(false)
+
+func _on_ButtoObjects_pressed() -> void:
+	_layer_container.get_parent().visible = false
+	_objects_container.get_parent().visible = true
+	$"%ButtonLayers".set_pressed_no_signal(false)
+	$"%ButtonObjects".set_pressed_no_signal(true)

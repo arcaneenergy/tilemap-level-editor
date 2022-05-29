@@ -602,21 +602,84 @@ margin_bottom = 171.0
 input_pass_on_modal_close_click = false
 size_flags_vertical = 3
 
-[node name="Layers" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer"]
+margin_right = 320.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+
+[node name="LayerHolder" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+custom_constants/separation = 16
+
+[node name="Layers" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/LayerHolder"]
 unique_name_in_owner = true
 margin_right = 320.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/separation = 16
 
-[node name="ButtonNewLayer" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
-margin_top = 187.0
+[node name="ButtonNewLayer" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/LayerHolder"]
+margin_top = 16.0
 margin_right = 320.0
-margin_bottom = 215.0
+margin_bottom = 44.0
 focus_mode = 0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 text = "+ New Layer"
+
+[node name="ObjectHolder" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer"]
+visible = false
+margin_top = 28.0
+margin_right = 320.0
+margin_bottom = 56.0
+custom_constants/separation = 16
+
+[node name="Objects" type="VBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder"]
+unique_name_in_owner = true
+margin_top = -28.0
+margin_right = 320.0
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+custom_constants/separation = 16
+
+[node name="ButtonNewObject" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder"]
+unique_name_in_owner = true
+margin_right = 320.0
+margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+text = "+ Object"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3"]
+margin_top = 187.0
+margin_right = 320.0
+margin_bottom = 215.0
+custom_constants/separation = 16
+
+[node name="ButtonLayers" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+unique_name_in_owner = true
+margin_right = 152.0
+margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+toggle_mode = true
+pressed = true
+text = "Layers"
+
+[node name="ButtonObjects" type="Button" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 168.0
+margin_right = 320.0
+margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Objects"
 
 [node name="VSeparator2" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
 margin_left = 976.0
@@ -931,7 +994,10 @@ align = 2
 autowrap = true
 
 [connection signal="value_changed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/TileDisplaySizeVSlider" to="." method="_on_TileDisplaySizeVSlider_value_changed"]
-[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/LayerHolder/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder/ButtonNewObject" to="." method="_on_ButtonNewObject_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer/ButtonLayers" to="." method="_on_ButtonLayers_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/HBoxContainer/ButtonObjects" to="." method="_on_ButtoObjects_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonImport" to="." method="_on_ButtonImport_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonExport" to="." method="_on_ButtonExport_pressed"]
 [connection signal="toggled" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ShapeContainer/ButtonCircle" to="." method="_on_ButtonCircle_toggled"]
