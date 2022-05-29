@@ -106,7 +106,8 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 	for x in range(img_tex.get_width() / 16):
 		for y in range(img_tex.get_height() / 16):
 			var btn := TILE_BTN.instance()
-			btn.connect("pressed", self, "_on_TextureButton_pressed", [idx])
+			btn.connect("pressed", self, "_on_TileButton_pressed", [idx])
+			btn.get_node("LabelIndex").text = str(idx)
 			var at := AtlasTexture.new()
 			at.atlas = img_tex
 			at.region = Rect2(x * 16, y * 16, 16, 16)
@@ -119,14 +120,14 @@ func _on_Layer_toggled(button_pressed: bool, layer: Control) -> void:
 
 func _set_selection(idx: int) -> void:
 	if _selected_tile != -1:
-		_ts_container.get_child(_selected_tile).get_node("Label").visible = false
+		_ts_container.get_child(_selected_tile).get_node("LabelSelect").visible = false
 
 	_selected_tile = idx
 
 	if idx != -1:
-		_ts_container.get_child(idx).get_node("Label").visible = true
+		_ts_container.get_child(idx).get_node("LabelSelect").visible = true
 
-func _on_TextureButton_pressed(idx: int) -> void:
+func _on_TileButton_pressed(idx: int) -> void:
 	_set_selection(idx)
 
 func _on_Layer_moved_up(layer: Control) -> void:

@@ -713,6 +713,7 @@ window_title = "Datei öffnen"
 resizable = true
 mode = 0
 access = 2
+filters = PoolStringArray( "*.json" )
 show_hidden_files = true
 
 [node name="FileDialogExportJson" type="FileDialog" parent="CanvasLayer/Control"]

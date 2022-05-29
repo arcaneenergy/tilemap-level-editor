@@ -8,9 +8,21 @@ focus_mode = 0
 input_pass_on_modal_close_click = false
 expand = true
 
-[node name="Label" type="Label" parent="."]
+[node name="LabelSelect" type="Label" parent="."]
 visible = false
-margin_right = 40.0
-margin_bottom = 22.0
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 36.0
+margin_bottom = 18.0
 input_pass_on_modal_close_click = false
 text = "X"
+
+[node name="LabelIndex" type="Label" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -36.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 18.0
+input_pass_on_modal_close_click = false
+align = 2
