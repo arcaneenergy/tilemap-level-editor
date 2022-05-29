@@ -201,16 +201,13 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	var file := File.new()
 	file.open(path, File.WRITE)
 
-	var data := []
-	for lay in _layer_container.get_children():
-		var a := {
-			"texture_path": lay.get_meta("tex_path"),
-			"cells": [],
-		}
+	var data := {}
+	for idx in range(_layer_container.get_child_count()):
+		data[idx] = []
+		var lay = _layer_container.get_child(idx)
 		var tm := lay.get_meta("tm") as TileMap
 		for c in tm.get_used_cells():
-			a["cells"].push_back([tm.get_cellv(c), c.x, c.y])
-		data.push_back(a)
+			data[idx].push_back([tm.get_cellv(c), c.x, c.y])
 
 	file.store_string(JSON.print(data))
 	file.close()
