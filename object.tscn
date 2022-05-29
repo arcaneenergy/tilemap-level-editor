@@ -475,19 +475,19 @@ WindowDialog/styles/panel = SubResource( 4 )
 [node name="Object" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.05, 0.05 )
+scale = Vector2( 0.075, 0.075 )
 texture = ExtResource( 1 )
-centered = false
+offset = Vector2( 400, 300 )
 
 [node name="Label" type="Label" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -82.0
-margin_top = 3.0
-margin_right = 82.0
-margin_bottom = 27.0
+margin_left = -52.0
+margin_top = 36.0
+margin_right = 112.0
+margin_bottom = 60.0
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 82, 12 )
 input_pass_on_modal_close_click = false

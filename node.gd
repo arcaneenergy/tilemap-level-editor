@@ -384,5 +384,5 @@ func _update_obj(obj_item: Control) -> void:
 	var obj := obj_item.get_meta("obj") as Node2D
 	obj.get_node("Label").text = obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text
 	obj.position = Vector2(
-		16 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
-		16 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text))
+		64 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
+		64 * int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text))
