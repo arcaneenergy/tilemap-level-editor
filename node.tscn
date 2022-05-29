@@ -557,18 +557,30 @@ input_pass_on_modal_close_click = false
 custom_constants/separation = 16
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
-margin_right = 608.0
+margin_right = 576.0
 margin_bottom = 215.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 
 [node name="TilesetContainer" type="HFlowContainer" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 608.0
+margin_right = 576.0
 input_pass_on_modal_close_click = false
 size_flags_horizontal = 3
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
+
+[node name="TileDisplaySizeVSlider" type="VSlider" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
+margin_left = 592.0
+margin_right = 608.0
+margin_bottom = 215.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+min_value = 16.0
+max_value = 128.0
+step = 4.0
+value = 16.0
+rounded = true
 
 [node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer"]
 margin_left = 624.0
@@ -918,6 +930,7 @@ input_pass_on_modal_close_click = false
 align = 2
 autowrap = true
 
+[connection signal="value_changed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/TileDisplaySizeVSlider" to="." method="_on_TileDisplaySizeVSlider_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonImport" to="." method="_on_ButtonImport_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer/ButtonExport" to="." method="_on_ButtonExport_pressed"]

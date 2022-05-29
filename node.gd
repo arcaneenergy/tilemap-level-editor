@@ -130,6 +130,12 @@ func _set_selection(idx: int) -> void:
 func _on_TileButton_pressed(idx: int) -> void:
 	_set_selection(idx)
 
+func _on_TileDisplaySizeVSlider_value_changed(value: float) -> void:
+	for i in _ts_container.get_children():
+		i.rect_min_size = Vector2.ONE * int(value)
+	_ts_container.set("custom_constants/vseparation", value / 8.0)
+	_ts_container.set("custom_constants/hseparation", value / 8.0)
+
 func _on_Layer_moved_up(layer: Control) -> void:
 	if layer.get_index() - 1 >= 0:
 		var new_idx := layer.get_index() - 1
