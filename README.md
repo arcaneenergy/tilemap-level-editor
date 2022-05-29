@@ -66,25 +66,32 @@ Change the size and shape of the cursor using the buttons in the lower right cor
 
 ## Exported JSON file
 
-The exported JSON file looks like this:
+The exported JSON file might look like this:
 
 ```json
-[
-    {
-        "texture_path": "tilemap-level-editor/tileset.png",
-        "cells": [
-            [2,-6,-1],
-            [2,-5,-1]
-        ]
-    },
-    {
-        "texture_path": "tilemap-level-editor/tileset.png",
-        "cells": [
-            [4,-7,-2],
-            [4,-6,-2]
-        ]
-    }
-]
+{
+    "layers": [
+        {
+            "texture_path": "C:/tilemap-level-editor/test/tileset.png",
+            "cells": [
+                [
+                    4,
+                    -5,
+                    -3
+                ],
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "key": "player",
+            "position": [
+                2,
+                4
+            ]
+        }
+    ]
+}
 ```
 
 Each cell contains an ID, an x and a y position. The ID is used to identify which cell in the tileset it refers to.
