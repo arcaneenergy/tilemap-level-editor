@@ -213,7 +213,7 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 
 	var data := {
 		"layers": [],
-		"objects": [],
+		"objects": {},
 	}
 	for lay in _layer_container.get_children():
 		var a := {
@@ -225,13 +225,12 @@ func _on_FileDialogExportJson_file_selected(path: String) -> void:
 			a["cells"].push_back([tm.get_cellv(c), c.x, c.y])
 		data["layers"].push_back(a)
 	for obj_item in _objects_list.get_children():
-		data["objects"].push_back({
-			"key": obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text,
+		data["objects"][obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text] = {
 			"position": [
 				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
 				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text),
 			],
-		})
+		}
 
 	file.store_string(JSON.print(data))
 	file.close()
