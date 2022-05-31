@@ -397,7 +397,65 @@ func _get_export_data(format: int) -> Dictionary:
 	match format:
 		# Tiled JSON format
 		0:
-			return {}
+			var data := {
+				"compressionlevel": -1,
+				"height": 0,
+				"infinite": false,
+				"layers": [],
+				"nextlayerid": 2,
+				"nextobjectid": 1,
+				"orientation": "orthogonal",
+				"renderorder": "right-down",
+				"tiledversion": "1.8.5",
+				"tileheight": 16,
+				"tilesets": [],
+				"tilewidth": 16,
+				"type": "map",
+				"version": "1.8",
+				"width": 0,
+			}
+
+			var max_size := Vector2(0, 0)
+
+			for idx in range(_layer_container.get_child_count()):
+				var lay = _layer_container.get_child(idx)
+				var tm := lay.get_meta("tm") as TileMap
+				var size := tm.get_used_rect() as Rect2
+
+				if max_size.x < size.size.x:
+					max_size.x = size.size.x
+				if max_size.y < size.size.y:
+					max_size.y = size.size.y
+
+				var a := {
+					"data": [],
+					"height": size.size.x,
+					"id": idx + 1,
+					"name": "Layer %d" % idx,
+					"opacity": 1,
+					"type": "tilelayer",
+					"visible": true,
+					"width": size.size.y,
+					"x": 0,
+					"y": 0,
+				}
+				for c in tm.get_used_cells():
+					a["data"].push_back(tm.get_cellv(c))
+				data["layers"].push_back(a)
+
+			for i in range(_layer_container.get_children().size()):
+				var path := _layer_container.get_child(i).get_meta("path").get_basename() as String
+				var split := path.split("/")
+				data["tilesets"].push_back({
+					"gid": i + 1,
+					"source": split[split.size() - 1] + ".tsx",
+				})
+				i += 1
+
+			data["height"] = max_size.x
+			data["width"] = max_size.y
+
+			return data
 		# Minimal Arcane Energy's format
 		1:
 			var data := {
