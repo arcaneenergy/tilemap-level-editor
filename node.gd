@@ -18,6 +18,7 @@ onready var _hslider_size: HSlider = $"%HSliderSize"
 onready var _hslider_size_lbl: Label = $"%HSliderSize/Label"
 onready var _cursor_container: Node2D = $CursorContainer
 onready var _window_dialog_info: WindowDialog = $"%WindowDialogInfo"
+onready var _export_format_window_dialog: WindowDialog = $"%ExportFormatWindowDialog"
 
 enum BrushShape { CIRCLE, SQUARE }
 
@@ -27,6 +28,7 @@ var _selected_tile := -1
 var _current_shape := 0
 var _current_size := 1
 var _cursors := []
+var _export_format := 0
 
 const CAMERA_MOVE_SPEED := 100
 const CURSOR := preload("res://cursor.tscn")
@@ -187,8 +189,7 @@ func _on_ButtonImport_pressed() -> void:
 	_fd_import.popup()
 
 func _on_ButtonExport_pressed() -> void:
-	_fd_export.popup()
-	_fd_export.current_file = "level.json"
+	_export_format_window_dialog.popup()
 
 func _on_FileDialogImportJson_file_selected(path: String) -> void:
 	var file := File.new()
@@ -210,28 +211,10 @@ func _on_FileDialogImportJson_file_selected(path: String) -> void:
 func _on_FileDialogExportJson_file_selected(path: String) -> void:
 	var file := File.new()
 	file.open(path, File.WRITE)
-
-	var data := {
-		"layers": [],
-		"objects": {},
-	}
-	for idx in range(_layer_container.get_child_count()):
-		var lay = _layer_container.get_child(idx)
-		var tm := lay.get_meta("tm") as TileMap
-		var a := []
-		for c in tm.get_used_cells():
-			a.push_back([tm.get_cellv(c), c.x, c.y])
-		data["layers"].push_back(a)
-	for obj_item in _objects_list.get_children():
-		data["objects"][obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text] = {
-			"position": [
-				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
-				int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text),
-			],
-		}
-
-	file.store_string(JSON.print(data))
+	file.store_string(JSON.print(_get_export_data(_export_format)))
 	file.close()
+
+	_export_format_window_dialog.visible = false
 
 func _on_FileDialogNewLayer_file_selected(path: String) -> void:
 	_create_layer(path)
@@ -409,3 +392,37 @@ func _create_object(data := {}) -> void:
 	obj_item.set_meta("obj", obj)
 
 	_update_obj(obj_item)
+
+func _get_export_data(format: int) -> Dictionary:
+	match format:
+		# Tiled JSON format
+		0:
+			return {}
+		# Minimal Arcane Energy's format
+		1:
+			var data := {
+				"layers": [],
+				"objects": {},
+			}
+			for idx in range(_layer_container.get_child_count()):
+				var lay = _layer_container.get_child(idx)
+				var tm := lay.get_meta("tm") as TileMap
+				var a := []
+				for c in tm.get_used_cells():
+					a.push_back([tm.get_cellv(c), c.x, c.y])
+				data["layers"].push_back(a)
+			for obj_item in _objects_list.get_children():
+				data["objects"][obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer/Key").text] = {
+					"position": [
+						int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosX").text),
+						int(obj_item.get_node("MarginContainer/VBoxContainer/HBoxContainer2/PosY").text),
+					],
+				}
+			return data
+		_:
+			return {}
+
+func _on_ButtonExportFormat_pressed(format: int) -> void:
+	_fd_export.popup()
+	_fd_export.current_file = "level.json"
+	_export_format = format

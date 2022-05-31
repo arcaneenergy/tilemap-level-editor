@@ -243,11 +243,11 @@ MarginContainer/constants/margin_bottom = 0
 MarginContainer/constants/margin_left = 0
 MarginContainer/constants/margin_right = 0
 MarginContainer/constants/margin_top = 0
-MenuButton/colors/font_color = Color( 0, 0, 0, 1 )
+MenuButton/colors/font_color = Color( 1, 1, 1, 1 )
 MenuButton/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 MenuButton/colors/font_color_focus = Color( 0, 0, 0, 1 )
 MenuButton/colors/font_color_hover = Color( 0, 0, 0, 1 )
-MenuButton/colors/font_color_pressed = Color( 0, 0, 0, 1 )
+MenuButton/colors/font_color_pressed = Color( 1, 1, 1, 1 )
 MenuButton/constants/hseparation = 0
 MenuButton/fonts/font = SubResource( 2 )
 MenuButton/styles/disabled = null
@@ -259,7 +259,7 @@ OptionButton/colors/font_color = Color( 1, 1, 1, 1 )
 OptionButton/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 OptionButton/colors/font_color_focus = Color( 1, 1, 1, 1 )
 OptionButton/colors/font_color_hover = Color( 1, 1, 1, 1 )
-OptionButton/colors/font_color_pressed = Color( 0, 0, 0, 1 )
+OptionButton/colors/font_color_pressed = Color( 1, 1, 1, 1 )
 OptionButton/constants/arrow_margin = 0
 OptionButton/constants/hseparation = 0
 OptionButton/fonts/font = SubResource( 2 )
@@ -272,7 +272,7 @@ OptionButton/styles/pressed = null
 Panel/styles/panel = SubResource( 4 )
 PanelContainer/styles/panel = null
 PopupDialog/styles/panel = null
-PopupMenu/colors/font_color = Color( 0, 0, 0, 1 )
+PopupMenu/colors/font_color = Color( 1, 1, 1, 1 )
 PopupMenu/colors/font_color_accel = Color( 0, 0, 0, 1 )
 PopupMenu/colors/font_color_disabled = Color( 0, 0, 0, 1 )
 PopupMenu/colors/font_color_hover = Color( 0, 0, 0, 1 )
@@ -999,6 +999,49 @@ input_pass_on_modal_close_click = false
 align = 2
 autowrap = true
 
+[node name="ExportFormatWindowDialog" type="WindowDialog" parent="CanvasLayer/Control"]
+unique_name_in_owner = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -292.0
+margin_top = -168.0
+margin_right = 292.0
+margin_bottom = 168.0
+window_title = "Select export format"
+resizable = true
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Control/ExportFormatWindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/ExportFormatWindowDialog/CenterContainer"]
+margin_left = 136.0
+margin_top = 132.0
+margin_right = 448.0
+margin_bottom = 204.0
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+custom_constants/separation = 16
+
+[node name="ButtonExportFormat0" type="Button" parent="CanvasLayer/Control/ExportFormatWindowDialog/CenterContainer/VBoxContainer"]
+margin_right = 312.0
+margin_bottom = 28.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "Tiled JSON format"
+
+[node name="ButtonExportFormat1" type="Button" parent="CanvasLayer/Control/ExportFormatWindowDialog/CenterContainer/VBoxContainer"]
+margin_top = 44.0
+margin_right = 312.0
+margin_bottom = 72.0
+focus_mode = 0
+input_pass_on_modal_close_click = false
+text = "Minimal Arcane Energy's format"
+
 [connection signal="value_changed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/TileDisplaySizeVSlider" to="." method="_on_TileDisplaySizeVSlider_value_changed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/LayerHolder/ButtonNewLayer" to="." method="_on_ButtonNewLayer_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/Panel/MarginContainer/HBoxContainer/VBoxContainer3/ScrollContainer/VBoxContainer/ObjectHolder/ButtonNewObject" to="." method="_on_ButtonNewObject_pressed"]
@@ -1016,3 +1059,5 @@ autowrap = true
 [connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonGithub" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonGithub_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonYouTube" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonYouTube_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/WindowDialogInfo/MarginContainer/VBoxContainer/HBoxContainer2/ButtonWebsite" to="CanvasLayer/Control/WindowDialogInfo" method="_on_ButtonWebsite_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/ExportFormatWindowDialog/CenterContainer/VBoxContainer/ButtonExportFormat0" to="." method="_on_ButtonExportFormat_pressed" binds= [ 0 ]]
+[connection signal="pressed" from="CanvasLayer/Control/ExportFormatWindowDialog/CenterContainer/VBoxContainer/ButtonExportFormat1" to="." method="_on_ButtonExportFormat_pressed" binds= [ 1 ]]
