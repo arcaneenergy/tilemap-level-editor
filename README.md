@@ -1,4 +1,4 @@
-# Tilemap Level Editor
+# Tilemap Level Editor (Archived)
 
 ![Banner](readme/banner.png)
 
